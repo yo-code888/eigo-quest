@@ -247,7 +247,7 @@
   </main>
 
   <script>
-    const WORDS = [
+    let WORDS = [
       { en: "achieve", ja: "達成する", ex: "I want to achieve my goal.", exJa: "私は目標を達成したい。" },
       { en: "increase", ja: "増加する・増やす", ex: "The number will increase.", exJa: "その数は増えるだろう。" },
       { en: "reduce", ja: "減らす", ex: "We should reduce waste.", exJa: "私たちはごみを減らすべきだ。" },
@@ -396,8 +396,47 @@
     $("search").addEventListener("input", renderWords);
     $("filter").addEventListener("change", renderWords);
 
-    updateStats();
-    renderWords();
+    
+updateStats();
+
+async function loadWordsFromCSV() {
+  const response = await fetch("./words-highschool.csv");
+
+  if (!response.ok) {
+    throw new Error("CSVを読み込めませんでした");
+  }
+
+  const csv = (await response.text()).replace(/^\uFEFF/, "");
+  const lines = csv.trim().split(/\r?\n/);
+
+  const loadedWords = lines.slice(1)
+    .filter(line => line.trim())
+    .map(line => {
+      const columns = line.split(",");
+
+      return {
+        number: columns[0].trim(),
+        en: columns[1].trim(),
+        ja: columns.slice(2).join(",").trim(),
+        ex: "",
+        exJa: ""
+      };
+    })
+    .filter(word => word.en && word.ja);
+
+  if (loadedWords.length === 0) {
+    throw new Error("CSVに単語がありません");
+  }
+
+  WORDS = loadedWords;
+  renderWords();
+}
+
+loadWordsFromCSV().catch(error => {
+  console.error(error);
+  renderWords();
+});
+
   </script>
 </body>
 </html>
