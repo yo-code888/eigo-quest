@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>高校英単語帳｜英単語クエスト</title>
+  <style>
+    :root {
+      --purple: #7555d9;
+      --pink: #ff78ad;
+      --mint: #baf3dc;
+      --bg: #f7f4ff;
+      --text: #30264b;
+      --muted: #776f8b;
+      --white: #fff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: "Arial", "Noto Sans JP", sans-serif;
+      background: linear-gradient(135deg, #f7f4ff, #fff1f7);
+      color: var(--text);
+    }
+
+    .container { max-width: 850px; margin: auto; }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .brand { font-size: 14px; font-weight: bold; color: var(--purple); }
+    .stats { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .stat {
+      background: white;
+      padding: 9px 13px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px #30264b0d;
+      font-size: 13px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #7555d9, #a477ed);
+      color: white;
+      padding: 25px;
+      border-radius: 24px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 22px #7555d926;
+    }
+
+    .hero h1 { margin: 8px 0; font-size: clamp(25px, 5vw, 34px); }
+    .hero p { margin: 8px 0 0; line-height: 1.7; }
+    .tag {
+      display: inline-block;
+      background: #ffffff26;
+      padding: 5px 10px;
+      border-radius: 99px;
+      font-size: 12px;
+    }
+
+    .guide {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: white;
+      padding: 15px;
+      border-radius: 18px;
+      margin-bottom: 18px;
+      border: 2px solid #eee7ff;
+    }
+
+    .guide-icon { font-size: 32px; }
+    .guide p { margin: 0; line-height: 1.6; font-size: 14px; }
+
+    .panel {
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 16px #30264b0a;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    input, select, button {
+      font: inherit;
+      border-radius: 12px;
+    }
+
+    input, select {
+      padding: 12px;
+      border: 1px solid #ddd5ef;
+      background: white;
+      color: var(--text);
+    }
+
+    input { flex: 1; min-width: 180px; }
+
+    button {
+      cursor: pointer;
+      border: 0;
+      padding: 11px 15px;
+      font-weight: bold;
+      transition: transform .15s, opacity .15s;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid #ff9fc5;
+      outline-offset: 2px;
+    }
+
+    .primary { background: var(--purple); color: white; }
+    .secondary { background: #f0ebff; color: var(--purple); }
+    .pink { background: #ffe6f0; color: #a52c65; }
+
+    .summary {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 13px;
+      margin: 8px 0 14px;
+    }
+
+    .word-list { display: grid; gap: 12px; }
+
+    .word-card {
+      border: 1px solid #eee7fa;
+      border-radius: 16px;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .word-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .english { font-size: 21px; font-weight: 800; overflow-wrap: anywhere; }
+    .meaning { color: var(--purple); font-weight: bold; margin-top: 5px; }
+    .example {
+      background: #f8f6ff;
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 12px;
+      line-height: 1.7;
+      font-size: 13px;
+    }
+
+    .example strong { color: var(--purple); }
+    .favorite { white-space: nowrap; background: #fff0f6; color: #a52c65; }
+    .favorite.active { background: #ff78ad; color: white; }
+
+    .empty {
+      text-align: center;
+      padding: 30px 10px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .back-link {
+      display: inline-block;
+      color: var(--purple);
+      font-weight: bold;
+      text-decoration: none;
+      margin: 4px 0 20px;
+    }
+
+    .back-link:hover { text-decoration: underline; }
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      padding: 10px;
+    }
+
+    @media (max-width: 520px) {
+      body { padding: 12px; }
+      .hero, .panel { padding: 17px; }
+      .word-top { align-items: flex-start; }
+      .english { font-size: 19px; }
+      .stat { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <div class="brand">⚔️ 英単語クエスト</div>
+      <div class="stats">
+        <div class="stat">⭐ レベル <strong id="level">1</strong></div>
+        <div class="stat">✨ XP <strong id="xp">0</strong></div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <span class="tag">STAGE 11 · HIGH SCHOOL</span>
+      <h1>📚 高校英単語帳</h1>
+      <p>高校英語で役立つ単語を覚えよう！<br>検索やお気に入り機能を使って、自分だけの単語帳を作れるよ。</p>
+    </section>
+
+    <section class="guide">
+      <div class="guide-icon">🧙</div>
+      <p><strong>冒険ガイドからのアドバイス</strong><br>
+        まず英単語と意味を確認しよう。例文も読むと、単語の使い方まで覚えやすくなるよ！</p>
+    </section>
+
+    <section class="panel">
+      <div class="controls">
+        <input id="search" type="search" placeholder="英単語・日本語で検索…" aria-label="単語を検索">
+        <select id="filter" aria-label="表示する単語">
+          <option value="all">すべての単語</option>
+          <option value="favorites">お気に入りのみ</option>
+        </select>
+      </div>
+
+      <div class="summary">
+        <span id="count">30語を収録</span>
+        <span>💗 お気に入り：<strong id="favoriteCount">0</strong>語</span>
+      </div>
+
+      <div id="wordList" class="word-list"></div>
+    </section>
+
+    <a class="back-link" href="highschool.html">← 高校生メニューに戻る</a>
+
+    <footer>英単語クエスト · 毎日少しずつレベルアップしよう！</footer>
+  </main>
+
+  <script>
+    const WORDS = [
+      { en: "achieve", ja: "達成する", ex: "I want to achieve my goal.", exJa: "私は目標を達成したい。" },
+      { en: "increase", ja: "増加する・増やす", ex: "The number will increase.", exJa: "その数は増えるだろう。" },
+      { en: "reduce", ja: "減らす", ex: "We should reduce waste.", exJa: "私たちはごみを減らすべきだ。" },
+      { en: "provide", ja: "提供する", ex: "They provide food for children.", exJa: "彼らは子どもたちに食べ物を提供する。" },
+      { en: "require", ja: "必要とする", ex: "This job requires time.", exJa: "この仕事には時間が必要だ。" },
+      { en: "consider", ja: "よく考える・検討する", ex: "Please consider my idea.", exJa: "私の考えを検討してください。" },
+      { en: "environment", ja: "環境", ex: "We must protect the environment.", exJa: "私たちは環境を守らなければならない。" },
+      { en: "opportunity", ja: "機会", ex: "This is a good opportunity.", exJa: "これはよい機会だ。" },
+      { en: "experience", ja: "経験", ex: "It was a great experience.", exJa: "それはすばらしい経験だった。" },
+      { en: "knowledge", ja: "知識", ex: "Knowledge is important.", exJa: "知識は大切だ。" },
+      { en: "improve", ja: "改善する・上達する", ex: "I want to improve my English.", exJa: "私は英語を上達させたい。" },
+      { en: "develop", ja: "発達する・開発する", ex: "Children develop quickly.", exJa: "子どもは急速に成長する。" },
+      { en: "suggest", ja: "提案する", ex: "She suggested a new plan.", exJa: "彼女は新しい計画を提案した。" },
+      { en: "avoid", ja: "避ける", ex: "Try to avoid mistakes.", exJa: "間違いを避けるようにしよう。" },
+      { en: "allow", ja: "許す・可能にする", ex: "My parents allow me to go.", exJa: "両親は私が行くことを許している。" },
+      { en: "purpose", ja: "目的", ex: "What is the purpose of this meeting?", exJa: "この会議の目的は何ですか。" },
+      { en: "probably", ja: "おそらく", ex: "It will probably rain tomorrow.", exJa: "明日はおそらく雨が降るだろう。" },
+      { en: "although", ja: "〜だけれども", ex: "Although it was cold, we went out.", exJa: "寒かったけれど、私たちは出かけた。" },
+      { en: "necessary", ja: "必要な", ex: "Sleep is necessary for health.", exJa: "睡眠は健康に必要だ。" },
+      { en: "opinion", ja: "意見", ex: "What is your opinion?", exJa: "あなたの意見は何ですか。" },
+      { en: "decide", ja: "決める", ex: "I decided to study harder.", exJa: "私はもっと一生懸命勉強することに決めた。" },
+      { en: "discover", ja: "発見する", ex: "They discovered a new place.", exJa: "彼らは新しい場所を発見した。" },
+      { en: "support", ja: "支援する・支える", ex: "My friends support me.", exJa: "友達は私を支えてくれる。" },
+      { en: "instead", ja: "その代わりに", ex: "I walked instead of taking a bus.", exJa: "バスに乗る代わりに歩いた。" },
+      { en: "successful", ja: "成功した", ex: "The event was successful.", exJa: "そのイベントは成功した。" },
+      { en: "especially", ja: "特に", ex: "I especially like music.", exJa: "私は特に音楽が好きだ。" },
+      { en: "responsible", ja: "責任がある", ex: "You are responsible for this task.", exJa: "あなたにはこの仕事の責任がある。" },
+      { en: "suggestion", ja: "提案", ex: "Thank you for your suggestion.", exJa: "提案してくれてありがとう。" },
+      { en: "available", ja: "利用できる・入手できる", ex: "The room is available now.", exJa: "その部屋は今利用できる。" },
+      { en: "relationship", ja: "関係", ex: "We have a good relationship.", exJa: "私たちはよい関係にある。" }
+    ];
+
+    const SAVE_KEY = "eigoQuestSave";
+    const FAVORITE_KEY = "eigoQuestHighschoolFavorites";
+
+    const $ = id => document.getElementById(id);
+
+    function readFavorites() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(FAVORITE_KEY) || "[]");
+        return new Set(Array.isArray(saved) ? saved : []);
+      } catch {
+        return new Set();
+      }
+    }
+
+    let favorites = readFavorites();
+
+    function updateStats() {
+      let save = {};
+      try {
+        save = JSON.parse(localStorage.getItem(SAVE_KEY) || "{}") || {};
+      } catch {
+        save = {};
+      }
+
+      const xp = Number(save.xp) || 0;
+      $("xp").textContent = xp;
+      $("level").textContent = Math.floor(xp / 100) + 1;
+    }
+
+    function saveFavorites() {
+      localStorage.setItem(FAVORITE_KEY, JSON.stringify([...favorites]));
+    }
+
+    function renderWords() {
+      const query = $("search").value.trim().toLowerCase();
+      const onlyFavorites = $("filter").value === "favorites";
+
+      const filtered = WORDS.filter(word => {
+        const matchesSearch =
+          word.en.toLowerCase().includes(query) ||
+          word.ja.toLowerCase().includes(query);
+        const matchesFavorite = !onlyFavorites || favorites.has(word.en);
+        return matchesSearch && matchesFavorite;
+      });
+
+      $("count").textContent = `${filtered.length}語を表示 / 全${WORDS.length}語`;
+      $("favoriteCount").textContent = favorites.size;
+
+      const list = $("wordList");
+      list.replaceChildren();
+
+      if (filtered.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = onlyFavorites && favorites.size === 0
+          ? "まだお気に入りがないよ。気になる単語の♡を押して登録しよう！"
+          : "単語が見つからなかったよ。別の言葉で検索してみてね。";
+        list.appendChild(empty);
+        return;
+      }
+
+      filtered.forEach(word => {
+        const card = document.createElement("article");
+        card.className = "word-card";
+
+        const top = document.createElement("div");
+        top.className = "word-top";
+
+        const info = document.createElement("div");
+        const english = document.createElement("div");
+        english.className = "english";
+        english.textContent = word.en;
+
+        const meaning = document.createElement("div");
+        meaning.className = "meaning";
+        meaning.textContent = word.ja;
+
+        info.append(english, meaning);
+
+        const favorite = document.createElement("button");
+        favorite.className = "favorite" + (favorites.has(word.en) ? " active" : "");
+        favorite.textContent = favorites.has(word.en) ? "♥ 登録済み" : "♡ お気に入り";
+        favorite.setAttribute("aria-pressed", String(favorites.has(word.en)));
+        favorite.addEventListener("click", () => {
+          if (favorites.has(word.en)) {
+            favorites.delete(word.en);
+          } else {
+            favorites.add(word.en);
+          }
+          saveFavorites();
+          renderWords();
+        });
+
+        top.append(info, favorite);
+
+        const example = document.createElement("div");
+        example.className = "example";
+
+        const exampleTitle = document.createElement("strong");
+        exampleTitle.textContent = "例文：";
+
+        const englishExample = document.createElement("div");
+        englishExample.textContent = word.ex;
+
+        const japaneseExample = document.createElement("div");
+        japaneseExample.textContent = "📘 " + word.exJa;
+
+        example.append(exampleTitle, englishExample, japaneseExample);
+        card.append(top, example);
+        list.appendChild(card);
+      });
+    }
+
+    $("search").addEventListener("input", renderWords);
+    $("filter").addEventListener("change", renderWords);
+
+    updateStats();
+    renderWords();
+  </script>
+</body>
+</html>
