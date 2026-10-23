@@ -366,8 +366,9 @@ body {
 
       const filtered = WORDS.filter(word => {
         const matchesSearch =
-          word.en.toLowerCase().includes(query) ||
-          word.ja.toLowerCase().includes(query);
+  String(word.number || "").includes(query) ||
+  word.en.toLowerCase().includes(query) ||
+  word.ja.toLowerCase().includes(query);
         const matchesFavorite = !onlyFavorites || favorites.has(word.en);
         return matchesSearch && matchesFavorite;
       });
