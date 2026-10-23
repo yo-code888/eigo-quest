@@ -7,6 +7,45 @@
 <meta name="theme-color" content="#6558e8">
 <title>苦手単語の復習｜高校生版・英単語クエスト</title>
 <style>
+  
+/* 上部固定ナビゲーション */
+.common-top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.common-top-nav a,
+.common-top-nav button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  color: #222;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 固定ナビに本文が隠れないようにする */
+body {
+  padding-top: 68px;
+}
+
 :root {
   --purple:#6558e8; --pink:#ff719b; --mint:#5bd6b0;
   --bg:#f5f5ff; --ink:#202344; --muted:#777b99;
