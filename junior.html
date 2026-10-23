@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#6558e8">
+<title>中学生版｜英単語クエスト</title>
+<style>
+:root {
+  --purple:#6558e8;
+  --pink:#ff719b;
+  --mint:#5bd6b0;
+  --bg:#f5f5ff;
+  --ink:#202344;
+  --muted:#777b99;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  min-height:100vh;
+  color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 10% 5%,#e8e5ff,transparent 30%),
+    radial-gradient(circle at 90% 20%,#ffe5ef,transparent 28%),
+    var(--bg);
+}
+a { color:inherit; text-decoration:none; }
+.wrap { max-width:1000px; margin:auto; padding:18px; }
+header {
+  display:flex; justify-content:space-between;
+  align-items:center; gap:12px; margin-bottom:22px;
+}
+.brand { display:flex; align-items:center; gap:10px; font-weight:900; }
+.logo {
+  display:grid; place-items:center; width:46px; height:46px;
+  border-radius:15px; color:white; font-size:1.5rem;
+  background:linear-gradient(135deg,var(--purple),#a18aff);
+}
+.stats { display:flex; gap:8px; flex-wrap:wrap; }
+.pill {
+  background:white; border-radius:999px; padding:9px 12px;
+  box-shadow:0 4px 14px #30305c0c; font-weight:800;
+}
+.pill b { color:var(--purple); }
+.hero {
+  padding:28px; border-radius:28px; color:white;
+  background:linear-gradient(125deg,#6558e8,#8873f6 60%,#b58aff);
+  box-shadow:0 16px 35px #6558e82b;
+}
+.eyebrow { font-size:.8rem; font-weight:900; letter-spacing:.1em; }
+h1 { font-size:clamp(2rem,6vw,3rem); line-height:1.2; margin:12px 0; }
+.hero p { line-height:1.8; margin-bottom:0; }
+.section-head { margin:28px 2px 14px; }
+.section-head h2 { margin:0 0 5px; }
+.section-head p { margin:0; color:var(--muted); }
+.grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.card {
+  display:flex; flex-direction:column;
+  background:white; border-radius:24px; padding:22px;
+  box-shadow:0 8px 22px #34345c0b;
+  border:2px solid transparent; transition:.18s;
+}
+.card:hover { transform:translateY(-3px); border-color:#dedaff; }
+.card .emoji { font-size:2.5rem; }
+.card h3 { margin:10px 0 6px; font-size:1.25rem; }
+.card p { color:var(--muted); line-height:1.7; margin:0 0 18px; flex:1; }
+.tag {
+  display:inline-block; align-self:flex-start;
+  padding:5px 9px; margin-bottom:8px; border-radius:999px;
+  background:#f0efff; color:#5a4ed5; font-size:.78rem; font-weight:900;
+}
+.btn {
+  display:block; padding:13px; text-align:center;
+  border-radius:14px; font-weight:900;
+  background:var(--purple); color:white;
+}
+.btn.mint { background:var(--mint); color:#124d3d; }
+.btn.pink { background:var(--pink); color:#64223a; }
+.btn:hover { filter:brightness(.97); }
+.talk {
+  display:flex; align-items:center; gap:14px;
+  margin-top:18px; padding:17px; background:white;
+  border-radius:20px; box-shadow:0 8px 22px #34345c0b;
+}
+.talk-icon { font-size:2.2rem; }
+.talk p { margin:4px 0 0; color:var(--muted); line-height:1.6; }
+.back {
+  display:inline-block; margin-top:22px; padding:12px 17px;
+  background:white; border-radius:14px; font-weight:800;
+  box-shadow:0 4px 14px #30305c0c;
+}
+footer { text-align:center; padding:25px 5px; color:#898ba5; font-size:.8rem; }
+@media(max-width:650px) {
+  .wrap { padding:12px; }
+  header { align-items:flex-start; }
+  .grid { grid-template-columns:1fr; }
+  .hero { padding:23px; }
+  .pill { padding:7px 9px; font-size:.8rem; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="brand">
+    <div class="logo">⚔️</div>
+    <div>
+      英単語クエスト
+      <small style="display:block;color:#777b99">ENGLISH WORD RPG</small>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="pill">⭐ Lv.<b id="level">1</b></div>
+    <div class="pill">💎 <b id="xp">0</b> XP</div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow">JUNIOR HIGH SCHOOL</div>
+    <h1>🌱 中学生版<br>英単語クエスト！</h1>
+    <p>中学英語を楽しく攻略しよう！<br>
+    クイズ・スペル練習・復習を使って、英単語マスターを目指そう。</p>
+  </section>
+
+  <div class="section-head">
+    <h2>🎮 学習モードを選ぼう</h2>
+    <p>今日の気分に合わせて挑戦してみよう！</p>
+  </div>
+
+  <section class="grid">
+    <a class="card" href="junior-quiz.html">
+      <div class="emoji">🧠</div>
+      <span class="tag">4 CHOICES</span>
+      <h3>4択クイズ</h3>
+      <p>英単語の意味を4つの選択肢から選ぼう。テンポよく語彙を覚えよう！</p>
+      <span class="btn">クイズに挑戦 →</span>
+    </a>
+
+    <a class="card" href="junior-spell.html">
+      <div class="emoji">⌨️</div>
+      <span class="tag">SPELLING</span>
+      <h3>スペルチャレンジ</h3>
+      <p>日本語の意味を見て、英単語を入力しよう。つづりを正確に覚えられるよ！</p>
+      <span class="btn mint">スペルを練習 →</span>
+    </a>
+
+    <a class="card" href="junior-review.html">
+      <div class="emoji">🔁</div>
+      <span class="tag">REVIEW</span>
+      <h3>間違い復習</h3>
+      <p>クイズやスペルで間違えた単語をもう一度練習。苦手な単語を得意にしよう！</p>
+      <span class="btn pink">復習を始める →</span>
+    </a>
+
+    <a class="card" href="junior-vocab.html">
+      <div class="emoji">📖</div>
+      <span class="tag">WORD BOOK</span>
+      <h3>単語帳</h3>
+      <p>英単語と日本語の意味を確認しよう。検索や一覧で、覚えたい単語を探せるよ！</p>
+      <span class="btn">単語帳を開く →</span>
+    </a>
+  </section>
+
+  <section class="talk">
+    <div class="talk-icon">🧙‍♂️</div>
+    <div>
+      <strong>冒険ガイドからのアドバイス</strong>
+      <p id="message">まずは4択クイズがおすすめ！間違えた単語は復習モードで再挑戦しよう。✨</p>
+    </div>
+  </section>
+
+  <a class="back" href="index.html">← ホームに戻る</a>
+</main>
+
+<footer>
+  英単語クエスト · 中学生版
+</footer>
+</div>
+
+<script>
+function loadProgress() {
+  try {
+    return JSON.parse(localStorage.getItem("eigoQuestSave") || "{}");
+  } catch {
+    return {};
+  }
+}
+
+function updateProgress() {
+  const data = loadProgress();
+  const xp = Number(data.xp) || 0;
+  document.getElementById("xp").textContent = xp;
+  document.getElementById("level").textContent =
+    Math.floor(xp / 100) + 1;
+}
+
+updateProgress();
+window.addEventListener("storage", updateProgress);
+</script>
+</body>
+</html>
