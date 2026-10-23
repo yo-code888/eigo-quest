@@ -1,0 +1,404 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#6558e8">
+<title>スペルチャレンジ｜中学生版・英単語クエスト</title>
+<style>
+:root {
+  --purple:#6558e8;
+  --pink:#ff719b;
+  --mint:#5bd6b0;
+  --bg:#f5f5ff;
+  --ink:#202344;
+  --muted:#777b99;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; min-height:100vh; color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 10% 5%,#e8e5ff,transparent 30%),
+    radial-gradient(circle at 90% 20%,#ffe5ef,transparent 28%),
+    var(--bg);
+}
+button,input { font:inherit; }
+a { color:inherit; text-decoration:none; }
+.wrap { max-width:800px; margin:auto; padding:18px; }
+header {
+  display:flex; justify-content:space-between;
+  align-items:center; gap:12px; margin-bottom:22px;
+}
+.brand { display:flex; align-items:center; gap:10px; font-weight:900; }
+.logo {
+  display:grid; place-items:center; width:44px; height:44px;
+  border-radius:14px; color:white; font-size:1.4rem;
+  background:linear-gradient(135deg,var(--purple),#a18aff);
+}
+.stats { display:flex; gap:8px; flex-wrap:wrap; }
+.pill {
+  background:white; border-radius:999px; padding:9px 12px;
+  box-shadow:0 4px 14px #30305c0c; font-weight:800;
+}
+.pill b { color:var(--purple); }
+.hero {
+  padding:24px; border-radius:25px; color:white;
+  background:linear-gradient(125deg,#6558e8,#8873f6 60%,#b58aff);
+  box-shadow:0 14px 30px #6558e82b;
+}
+.eyebrow { font-size:.78rem; font-weight:900; letter-spacing:.1em; }
+h1 { font-size:clamp(1.8rem,5vw,2.7rem); margin:10px 0; }
+.hero p { line-height:1.7; margin:0; }
+.panel {
+  background:white; padding:22px; margin-top:18px;
+  border-radius:23px; box-shadow:0 8px 22px #34345c0b;
+}
+.topline {
+  display:flex; justify-content:space-between; align-items:center;
+  gap:10px; font-weight:800; margin-bottom:12px;
+}
+.track { height:10px; background:#eeeefa; border-radius:99px; overflow:hidden; }
+.track span {
+  display:block; height:100%; width:0;
+  background:linear-gradient(90deg,var(--mint),#43b9e8);
+  transition:width .2s;
+}
+.question { text-align:center; padding:24px 0 18px; }
+.question .label { color:var(--muted); }
+.question h2 { font-size:clamp(1.8rem,6vw,2.7rem); margin:12px 0; }
+.answer {
+  display:block; width:100%; padding:15px;
+  border:2px solid #e7e6f6; border-radius:14px;
+  background:#fff; color:var(--ink); outline:none;
+}
+.answer:focus { border-color:var(--purple); }
+.primary {
+  border:0; width:100%; margin-top:13px; padding:15px;
+  border-radius:15px; color:white; background:var(--purple);
+  font-weight:900; cursor:pointer;
+}
+.primary:disabled { opacity:.45; cursor:not-allowed; }
+.secondary {
+  border:0; padding:10px 13px; border-radius:12px;
+  background:#f0efff; color:#5a4ed5; font-weight:800; cursor:pointer;
+}
+.feedback {
+  display:none; padding:15px; margin-top:14px;
+  border-radius:15px; line-height:1.7; font-weight:700;
+}
+.feedback.show { display:block; }
+.feedback.good { background:#e7fff4; color:#126d4c; }
+.feedback.bad { background:#fff0f3; color:#a92c4b; }
+.tips { margin-top:14px; color:var(--muted); font-size:.9rem; line-height:1.7; }
+.links { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+.link {
+  display:inline-block; padding:12px 15px; border-radius:13px;
+  background:white; font-weight:800; box-shadow:0 4px 14px #30305c0c;
+}
+.talk {
+  display:flex; align-items:center; gap:12px;
+  background:white; padding:15px; margin-top:18px;
+  border-radius:18px; box-shadow:0 8px 22px #34345c0b;
+}
+.talk .icon { font-size:2rem; }
+.talk p { margin:4px 0 0; color:var(--muted); line-height:1.6; }
+.result { text-align:center; padding:10px 0; }
+.result .big { font-size:3.5rem; }
+.result h2 { font-size:2rem; }
+.result p { line-height:1.8; color:var(--muted); }
+.result strong { color:var(--purple); }
+[hidden] { display:none !important; }
+footer { text-align:center; padding:25px 5px; color:#898ba5; font-size:.8rem; }
+@media(max-width:520px) {
+  .wrap { padding:12px; }
+  header { align-items:flex-start; }
+  .pill { padding:7px 9px; font-size:.8rem; }
+  .panel { padding:16px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="brand">
+    <div class="logo">⚔️</div>
+    <div>英単語クエスト
+      <small style="display:block;color:#777b99">中学生版 · スペルチャレンジ</small>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="pill">⭐ Lv.<b id="level">1</b></div>
+    <div class="pill">💎 <b id="xp">0</b> XP</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">SPELLING QUEST</div>
+  <h1>⌨️ スペルチャレンジ！</h1>
+  <p>日本語の意味を見て、正しい英単語を入力しよう！</p>
+</section>
+
+<section class="panel" id="gamePanel">
+  <div class="topline">
+    <span id="questionCount">第1問 / 全10問</span>
+    <span id="score">正解 0問</span>
+  </div>
+  <div class="track"><span id="progress"></span></div>
+
+  <div class="question">
+    <div class="label">この日本語に合う英単語は？</div>
+    <h2 id="meaning">りんご</h2>
+    <div class="label" id="hint">英語のスペルを入力してね</div>
+  </div>
+
+  <form id="answerForm">
+    <input
+      class="answer"
+      id="answerInput"
+      type="text"
+      placeholder="英単語を入力..."
+      autocomplete="off"
+      autocapitalize="none"
+      spellcheck="false"
+      aria-label="英単語の回答"
+      required
+    >
+    <button class="primary" type="submit" id="checkBtn">回答する！</button>
+  </form>
+
+  <div class="feedback" id="feedback" aria-live="polite"></div>
+  <button class="primary" id="nextBtn" hidden>次の問題へ →</button>
+
+  <div class="tips">
+    💡 大文字・小文字は区別しないよ。スペルをよく確認しよう！
+  </div>
+</section>
+
+<section class="panel" id="resultPanel" hidden>
+  <div class="result">
+    <div class="big" id="resultEmoji">🏆</div>
+    <h2 id="resultTitle">チャレンジ完了！</h2>
+    <p id="resultText"></p>
+    <p>獲得経験値：<strong id="earnedXP">0 XP</strong></p>
+    <button class="primary" id="retryBtn">もう一度チャレンジ！</button>
+  </div>
+</section>
+
+<section class="talk">
+  <div class="icon">🧙‍♂️</div>
+  <div>
+    <strong>冒険ガイドからのアドバイス</strong>
+    <p id="guideMessage">スペルを間違えても大丈夫！正解を確認して、少しずつ覚えていこう。✨</p>
+  </div>
+</section>
+
+<div class="links">
+  <a class="link" href="junior.html">← 中学生版メニュー</a>
+  <a class="link" href="index.html">🏠 ホームに戻る</a>
+</div>
+
+<footer>英単語クエスト · 中学生版</footer>
+</div>
+
+<script>
+const WORDS = [
+  {en:"apple",ja:"りんご"},
+  {en:"book",ja:"本"},
+  {en:"school",ja:"学校"},
+  {en:"friend",ja:"友達"},
+  {en:"family",ja:"家族"},
+  {en:"water",ja:"水"},
+  {en:"beautiful",ja:"美しい"},
+  {en:"important",ja:"重要な"},
+  {en:"study",ja:"勉強する"},
+  {en:"practice",ja:"練習する"},
+  {en:"always",ja:"いつも"},
+  {en:"sometimes",ja:"ときどき"},
+  {en:"because",ja:"なぜなら"},
+  {en:"different",ja:"異なる"},
+  {en:"interesting",ja:"おもしろい"},
+  {en:"arrive",ja:"到着する"},
+  {en:"borrow",ja:"借りる"},
+  {en:"decide",ja:"決める"},
+  {en:"enjoy",ja:"楽しむ"},
+  {en:"future",ja:"未来"}
+];
+
+const SAVE_KEY = "eigoQuestSave";
+const REVIEW_KEY = "eigoQuestMistakes";
+
+let questions = [];
+let index = 0;
+let correctCount = 0;
+let answered = false;
+let earned = 0;
+
+const $ = id => document.getElementById(id);
+
+function readJSON(key, fallback) {
+  try {
+    return JSON.parse(localStorage.getItem(key)) ?? fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function updateStats() {
+  const save = readJSON(SAVE_KEY, {});
+  const xp = Number(save.xp) || 0;
+  $("xp").textContent = xp;
+  $("level").textContent = Math.floor(xp / 100) + 1;
+}
+
+function shuffle(array) {
+  const result = [...array];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+function createQuestions() {
+  questions = shuffle(WORDS).slice(0, 10);
+  index = 0;
+  correctCount = 0;
+  earned = 0;
+  answered = false;
+
+  $("gamePanel").hidden = false;
+  $("resultPanel").hidden = true;
+  $("answerInput").disabled = false;
+  $("checkBtn").hidden = false;
+  $("nextBtn").hidden = true;
+  $("guideMessage").textContent = "スペルを間違えても大丈夫！正解を確認して覚えよう。";
+
+  renderQuestion();
+  updateStats();
+}
+
+function renderQuestion() {
+  answered = false;
+  const word = questions[index];
+
+  $("questionCount").textContent = `第${index + 1}問 / 全${questions.length}問`;
+  $("score").textContent = `正解 ${correctCount}問`;
+  $("progress").style.width = `${index / questions.length * 100}%`;
+  $("meaning").textContent = word.ja;
+  $("hint").textContent = "英語のスペルを入力してね";
+  $("answerInput").value = "";
+  $("answerInput").disabled = false;
+  $("answerInput").focus();
+  $("checkBtn").hidden = false;
+  $("nextBtn").hidden = true;
+  $("feedback").className = "feedback";
+  $("feedback").textContent = "";
+}
+
+function saveMistake(word) {
+  const mistakes = readJSON(REVIEW_KEY, []);
+  const existing = mistakes.find(item => item.en === word.en);
+
+  if (existing) {
+    existing.count = (Number(existing.count) || 0) + 1;
+    existing.ja = word.ja;
+    existing.lastSeen = new Date().toISOString();
+  } else {
+    mistakes.push({
+      en: word.en,
+      ja: word.ja,
+      count: 1,
+      lastSeen: new Date().toISOString()
+    });
+  }
+
+  localStorage.setItem(REVIEW_KEY, JSON.stringify(mistakes));
+}
+
+function checkAnswer(event) {
+  event.preventDefault();
+  if (answered) return;
+
+  const word = questions[index];
+  const answer = $("answerInput").value.trim().toLowerCase();
+
+  if (!answer) {
+    $("feedback").className = "feedback show bad";
+    $("feedback").textContent = "英単語を入力してね！";
+    return;
+  }
+
+  answered = true;
+  $("answerInput").disabled = true;
+  $("checkBtn").hidden = true;
+
+  const feedback = $("feedback");
+  feedback.className = "feedback show";
+
+  if (answer === word.en.toLowerCase()) {
+    correctCount++;
+    earned += 10;
+    feedback.classList.add("good");
+    feedback.textContent = "🎉 正解！ +10 XP";
+    $("guideMessage").textContent = "すばらしい！正しいスペルを覚えられたね。";
+  } else {
+    feedback.classList.add("bad");
+    feedback.textContent = `💡 正解は「${word.en}」だよ。意味は「${word.ja}」！`;
+    saveMistake(word);
+    $("guideMessage").textContent = "惜しい！正しいスペルを確認して、あとで復習しよう。";
+  }
+
+  $("score").textContent = `正解 ${correctCount}問`;
+  $("nextBtn").hidden = false;
+  $("nextBtn").textContent =
+    index === questions.length - 1 ? "結果を見る →" : "次の問題へ →";
+}
+
+function addXP(amount) {
+  const save = readJSON(SAVE_KEY, {});
+  save.xp = (Number(save.xp) || 0) + amount;
+  localStorage.setItem(SAVE_KEY, JSON.stringify(save));
+  updateStats();
+}
+
+function nextQuestion() {
+  if (!answered) return;
+
+  if (index < questions.length - 1) {
+    index++;
+    renderQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+function finishQuiz() {
+  addXP(earned);
+  $("gamePanel").hidden = true;
+  $("resultPanel").hidden = false;
+
+  const percent = Math.round(correctCount / questions.length * 100);
+  $("resultEmoji").textContent =
+    percent === 100 ? "👑" : percent >= 70 ? "🏆" : "💪";
+  $("resultTitle").textContent =
+    percent === 100 ? "パーフェクト！" :
+    percent >= 70 ? "チャレンジ成功！" : "チャレンジ完了！";
+  $("resultText").innerHTML =
+    `10問中 <strong>${correctCount}問正解</strong><br>` +
+    `正答率：<strong>${percent}%</strong><br>` +
+    `間違えた単語は復習モードで練習しよう！`;
+  $("earnedXP").textContent = `${earned} XP`;
+  $("progress").style.width = "100%";
+}
+
+$("answerForm").addEventListener("submit", checkAnswer);
+$("nextBtn").addEventListener("click", nextQuestion);
+$("retryBtn").addEventListener("click", createQuestions);
+
+createQuestions();
+</script>
+</body>
+</html>
