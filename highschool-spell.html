@@ -1,0 +1,449 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#6558e8">
+<title>スペルチャレンジ｜高校生版・英単語クエスト</title>
+<style>
+:root {
+  --purple:#6558e8; --pink:#ff719b; --mint:#5bd6b0;
+  --bg:#f5f5ff; --ink:#202344; --muted:#777b99;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; min-height:100vh; color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:radial-gradient(circle at 10% 5%,#e8e5ff,transparent 30%),
+    radial-gradient(circle at 90% 20%,#ffe5ef,transparent 28%),var(--bg);
+}
+button,input { font:inherit; }
+.wrap { max-width:820px; margin:auto; padding:18px; }
+header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:22px; }
+.brand { display:flex; align-items:center; gap:10px; font-weight:900; }
+.logo { display:grid; place-items:center; width:44px; height:44px; border-radius:14px; color:white; font-size:1.4rem; background:linear-gradient(135deg,var(--purple),#a18aff); }
+.stats { display:flex; gap:8px; flex-wrap:wrap; }
+.pill { background:white; border-radius:999px; padding:9px 12px; box-shadow:0 4px 14px #30305c0c; font-weight:800; }
+.pill b { color:var(--purple); }
+.hero { padding:24px; border-radius:25px; color:white; background:linear-gradient(125deg,#6558e8,#8873f6 60%,#b58aff); box-shadow:0 14px 30px #6558e82b; }
+.eyebrow { font-size:.78rem; font-weight:900; letter-spacing:.1em; }
+h1 { font-size:clamp(1.7rem,5vw,2.5rem); margin:10px 0; }
+.hero p { line-height:1.7; margin:0; }
+.panel { background:white; padding:22px; margin-top:18px; border-radius:23px; box-shadow:0 8px 22px #34345c0b; }
+.progress-row { display:flex; justify-content:space-between; gap:10px; font-size:.9rem; font-weight:800; color:var(--muted); }
+.progress { height:10px; background:#eeedfa; border-radius:999px; overflow:hidden; margin:10px 0 22px; }
+.bar { height:100%; width:0; background:linear-gradient(90deg,var(--purple),var(--pink)); transition:width .25s; }
+.label { font-size:.9rem; color:var(--muted); font-weight:800; }
+.meaning { font-size:clamp(1.8rem,6vw,2.6rem); font-weight:900; margin:12px 0 6px; overflow-wrap:anywhere; }
+.hint { color:var(--muted); margin-bottom:18px; line-height:1.7; }
+.input { width:100%; padding:15px; border:2px solid #e7e6f6; border-radius:14px; outline:none; background:#fcfbff; color:var(--ink); font-size:1.15rem; }
+.input:focus { border-color:var(--purple); }
+.input:disabled { opacity:.7; }
+.actions { display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-top:16px; }
+.btn { border:0; border-radius:13px; padding:13px 18px; font-weight:900; cursor:pointer; }
+.btn-primary { background:var(--purple); color:white; }
+.btn-light { background:#f0efff; color:var(--purple); }
+.btn:disabled { opacity:.45; cursor:not-allowed; }
+.feedback { min-height:52px; margin-top:16px; padding:13px 15px; border-radius:14px; background:#f5f4ff; line-height:1.6; overflow-wrap:anywhere; }
+.feedback.good { background:#e9fff6; }
+.feedback.bad { background:#fff0f5; }
+.talk { display:flex; align-items:center; gap:12px; background:white; padding:15px; margin-top:18px; border-radius:18px; box-shadow:0 8px 22px #34345c0b; }
+.talk .icon { font-size:2rem; }
+.talk p { margin:4px 0 0; color:var(--muted); line-height:1.6; }
+.result { text-align:center; }
+.result-emoji { font-size:3.5rem; }
+.result h2 { font-size:1.8rem; margin:8px 0; }
+.score { font-size:2.5rem; color:var(--purple); font-weight:1000; }
+.mistake-list { text-align:left; padding-left:22px; line-height:1.9; }
+.links { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+.link { display:inline-block; padding:12px 15px; border-radius:13px; background:white; font-weight:800; box-shadow:0 4px 14px #30305c0c; text-decoration:none; color:inherit; }
+footer { text-align:center; padding:25px 5px; color:#898ba5; font-size:.8rem; }
+@media(max-width:520px) {
+  .wrap { padding:12px; } header { align-items:flex-start; }
+  .pill { padding:7px 9px; font-size:.8rem; }
+  .panel { padding:16px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand">
+    <div class="logo">⚔️</div>
+    <div>英単語クエスト<small style="display:block;color:#777b99">高校生版 · スペル問題</small></div>
+  </div>
+  <div class="stats">
+    <div class="pill">⭐ Lv.<b id="level">1</b></div>
+    <div class="pill">💎 <b id="xp">0</b> XP</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">HIGH SCHOOL · SPELL QUEST</div>
+  <h1>✍️ スペルチャレンジ</h1>
+  <p>日本語の意味を見て、英単語を正しく入力しよう！大文字・小文字は区別しないよ。</p>
+</section>
+
+<section class="panel">
+  <div class="progress-row">
+    <span id="questionCount">全10問</span>
+    <span id="scoreLabel">正解 0</span>
+  </div>
+  <div class="progress"><div class="bar" id="progressBar"></div></div>
+
+  <div id="questionArea">
+    <div class="label">この意味の英単語を入力しよう</div>
+    <div class="meaning" id="meaning">Ready?</div>
+    <div class="hint" id="hint">準備ができたらチャレンジ開始！</div>
+    <form id="answerForm">
+      <input class="input" id="answer" type="text" autocomplete="off"
+        autocapitalize="none" spellcheck="false"
+        placeholder="英単語を入力..." disabled>
+      <div class="actions">
+        <button class="btn btn-light" type="button" id="startBtn">スタート</button>
+        <button class="btn btn-primary" type="submit" id="checkBtn" disabled>答え合わせ</button>
+        <button class="btn btn-primary" type="button" id="nextBtn" disabled>次の問題 →</button>
+      </div>
+    </form>
+    <div class="feedback" id="feedback" aria-live="polite">全10問に挑戦しよう！</div>
+  </div>
+</section>
+
+<section class="talk">
+  <div class="icon">🧙‍♂️</div>
+  <div>
+    <strong>冒険ガイドのアドバイス</strong>
+    <p id="guideMessage">スペルを間違えても大丈夫。正しいつづりを確認して、少しずつ覚えていこう！</p>
+  </div>
+</section>
+
+<div class="links">
+  <a class="link" href="highschool.html">← 高校生版メニュー</a>
+  <a class="link" href="index.html">🏠 ホームに戻る</a>
+</div>
+<footer>英単語クエスト · 高校生版</footer>
+</div>
+
+<script>
+const WORDS = [
+  {en:"achieve",ja:"達成する"},
+  {en:"increase",ja:"増加する"},
+  {en:"reduce",ja:"減らす"},
+  {en:"provide",ja:"提供する"},
+  {en:"require",ja:"必要とする"},
+  {en:"consider",ja:"よく考える"},
+  {en:"environment",ja:"環境"},
+  {en:"opportunity",ja:"機会"},
+  {en:"experience",ja:"経験"},
+  {en:"knowledge",ja:"知識"},
+  {en:"improve",ja:"改善する"},
+  {en:"develop",ja:"発達する・開発する"},
+  {en:"suggest",ja:"提案する"},
+  {en:"avoid",ja:"避ける"},
+  {en:"allow",ja:"許す"},
+  {en:"purpose",ja:"目的"},
+  {en:"probably",ja:"おそらく"},
+  {en:"although",ja:"〜だけれども"},
+  {en:"necessary",ja:"必要な"},
+  {en:"opinion",ja:"意見"},
+  {en:"decide",ja:"決める"},
+  {en:"discover",ja:"発見する"},
+  {en:"support",ja:"支援する"},
+  {en:"instead",ja:"その代わりに"},
+  {en:"successful",ja:"成功した"},
+  {en:"especially",ja:"特に"},
+  {en:"responsible",ja:"責任がある"},
+  {en:"suggestion",ja:"提案"},
+  {en:"available",ja:"利用できる"},
+  {en:"relationship",ja:"関係"}
+];
+
+const SAVE_KEY = "eigoQuestSave";
+const MISTAKE_KEY = "eigoQuestMistakes";
+const $ = id => document.getElementById(id);
+
+let questions = [];
+let current = 0;
+let correctCount = 0;
+let earnedXP = 0;
+let answered = false;
+let mistakesThisRun = [];
+
+function readJSON(key, fallback) {
+  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+  catch { return fallback; }
+}
+
+function updateStats() {
+  const save = readJSON(SAVE_KEY, {});
+  const xp = Number(save.xp) || 0;
+  $("xp").textContent = xp;
+  $("level").textContent = Math.floor(xp / 100) + 1;
+}
+
+function shuffle(list) {
+  const arr = [...list];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function saveXP(amount) {
+  const save = readJSON(SAVE_KEY, {});
+  save.xp = (Number(save.xp) || 0) + amount;
+  localStorage.setItem(SAVE_KEY, JSON.stringify(save));
+  earnedXP += amount;
+  updateStats();
+}
+
+function saveMistake(word) {
+  const stored = readJSON(MISTAKE_KEY, []);
+  const list = Array.isArray(stored) ? stored : [];
+  const existing = list.find(item => item.en === word.en);
+
+  if (existing) {
+    existing.count = (Number(existing.count) || 0) + 1;
+    existing.lastSeen = new Date().toISOString();
+    existing.ja = word.ja;
+  } else {
+    list.push({
+      en: word.en,
+      ja: word.ja,
+      count: 1,
+      lastSeen: new Date().toISOString()
+    });
+  }
+  localStorage.setItem(MISTAKE_KEY, JSON.stringify(list));
+}
+
+function startQuiz() {
+  questions = shuffle(WORDS).slice(0, 10);
+  current = 0;
+  correctCount = 0;
+  earnedXP = 0;
+  answered = false;
+  mistakesThisRun = [];
+
+  $("startBtn").style.display = "none";
+  $("answer").disabled = false;
+  $("checkBtn").style.display = "";
+  $("checkBtn").disabled = false;
+  $("nextBtn").style.display = "none";
+  $("guideMessage").textContent = "落ち着いてスペルを入力しよう。正解で10 XP獲得！";
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+  const item = questions[current];
+  $("questionCount").textContent = `第 ${current + 1} 問 / ${questions.length} 問`;
+  $("scoreLabel").textContent = `正解 ${correctCount}`;
+  $("progressBar").style.width = `${current / questions.length * 100}%`;
+  $("meaning").textContent = item.ja;
+  $("hint").textContent = "英単語のつづりを入力してください。";
+  $("answer").value = "";
+  $("answer").disabled = false;
+  $("answer").focus();
+  $("checkBtn").style.display = "";
+  $("checkBtn").disabled = false;
+  $("nextBtn").style.display = "none";
+  $("feedback").className = "feedback";
+  $("feedback").textContent = "入力したら「答え合わせ」を押してね！";
+}
+
+$("answerForm").addEventListener("submit", event => {
+  event.preventDefault();
+  if (answered || !questions.length) return;
+
+  const typed = $("answer").value.trim().toLowerCase();
+  if (!typed) {
+    $("feedback").className = "feedback bad";
+    $("feedback").textContent = "英単語を入力してね！";
+    $("answer").focus();
+    return;
+  }
+
+  answered = true;
+  const item = questions[current];
+  const correct = typed === item.en.toLowerCase();
+  $("answer").disabled = true;
+  $("checkBtn").disabled = true;
+  $("checkBtn").style.display = "none";
+  $("nextBtn").style.display = "";
+
+  if (correct) {
+    correctCount++;
+    saveXP(10);
+    $("feedback").className = "feedback good";
+    $("feedback").textContent = `正解！🎉 ${item.en}（${item.ja}） +10 XP`;
+    $("guideMessage").textContent = "すばらしい！正しいスペルを覚えられたね。";
+  } else {
+    saveMistake(item);
+    mistakesThisRun.push(item);
+    $("feedback").className = "feedback bad";
+    $("feedback").textContent = `正解は「${item.en}」だよ。もう一度つづりを確認しよう！`;
+    $("guideMessage").textContent = "間違えた単語は復習リストに保存したよ。あとで練習しよう！";
+  }
+
+  $("scoreLabel").textContent = `正解 ${correctCount}`;
+  $("nextBtn").textContent = current === questions.length - 1 ? "結果を見る →" : "次の問題 →";
+});
+
+function showResult() {
+  $("progressBar").style.width = "100%";
+  $("questionCount").textContent = "クエスト完了！";
+  $("scoreLabel").textContent = `正解 ${correctCount} / 10`;
+
+  const area = $("questionArea");
+  area.replaceChildren();
+
+  const result = document.createElement("div");
+  result.className = "result";
+
+  const emoji = document.createElement("div");
+  emoji.className = "result-emoji";
+  emoji.textContent = correctCount === 10 ? "🏆" : correctCount >= 7 ? "🎉" : "💪";
+
+  const title = document.createElement("h2");
+  title.textContent = correctCount === 10 ? "パーフェクト！" :
+    correctCount >= 7 ? "よくできました！" : "チャレンジ完了！";
+
+  const score = document.createElement("div");
+  score.className = "score";
+  score.textContent = `${correctCount} / 10`;
+
+  const message = document.createElement("p");
+  message.textContent = `獲得経験値：+${earnedXP} XP`;
+
+  result.append(emoji, title, score, message);
+
+  if (mistakesThisRun.length) {
+    const detail = document.createElement("p");
+    detail.textContent = `間違えた単語：${mistakesThisRun.length}語。復習ページで確認しよう！`;
+    result.appendChild(detail);
+
+    const list = document.createElement("ul");
+    list.className = "mistake-list";
+    mistakesThisRun.forEach(word => {
+      const li = document.createElement("li");
+      li.textContent = `${word.ja}：${word.en}`;
+      list.appendChild(li);
+    });
+    result.appendChild(list);
+  } else {
+    const detail = document.createElement("p");
+    detail.textContent = "間違いなし！すばらしい！";
+    result.appendChild(detail);
+  }
+
+  const actions = document.createElement("div");
+  actions.className = "actions";
+
+  const retry = document.createElement("button");
+  retry.className = "btn btn-light";
+  retry.textContent = "もう一度挑戦";
+  retry.addEventListener("click", resetQuiz);
+
+  const menu = document.createElement("a");
+  menu.className = "link";
+  menu.href = "highschool.html";
+  menu.textContent = "高校生版メニュー";
+
+  actions.append(retry, menu);
+  result.appendChild(actions);
+  area.appendChild(result);
+  $("guideMessage").textContent = "お疲れさま！復習ページも使って、苦手な単語を覚えていこう。";
+}
+
+function resetQuiz() {
+  $("questionArea").innerHTML = `
+    <div class="label">この意味の英単語を入力しよう</div>
+    <div class="meaning" id="meaning">Ready?</div>
+    <div class="hint" id="hint">準備ができたらチャレンジ開始！</div>
+    <form id="answerForm">
+      <input class="input" id="answer" type="text" autocomplete="off"
+        autocapitalize="none" spellcheck="false" placeholder="英単語を入力..." disabled>
+      <div class="actions">
+        <button class="btn btn-light" type="button" id="startBtn">スタート</button>
+        <button class="btn btn-primary" type="submit" id="checkBtn" disabled>答え合わせ</button>
+        <button class="btn btn-primary" type="button" id="nextBtn" disabled>次の問題 →</button>
+      </div>
+    </form>
+    <div class="feedback" id="feedback" aria-live="polite">全10問に挑戦しよう！</div>`;
+  bindControls();
+}
+
+function bindControls() {
+  $("startBtn").addEventListener("click", startQuiz);
+  $("answerForm").addEventListener("submit", event => {
+    event.preventDefault();
+    checkAnswer();
+  });
+  $("nextBtn").addEventListener("click", nextQuestion);
+}
+
+// 初回と再挑戦の両方で同じ処理を使う
+function checkAnswer() {
+  if (answered || !questions.length) return;
+  const typed = $("answer").value.trim().toLowerCase();
+  if (!typed) {
+    $("feedback").className = "feedback bad";
+    $("feedback").textContent = "英単語を入力してね！";
+    return;
+  }
+
+  answered = true;
+  const item = questions[current];
+  const correct = typed === item.en.toLowerCase();
+
+  $("answer").disabled = true;
+  $("checkBtn").disabled = true;
+  $("checkBtn").style.display = "none";
+  $("nextBtn").style.display = "";
+
+  if (correct) {
+    correctCount++;
+    saveXP(10);
+    $("feedback").className = "feedback good";
+    $("feedback").textContent = `正解！🎉 ${item.en}（${item.ja}） +10 XP`;
+    $("guideMessage").textContent = "すばらしい！正しいスペルを覚えられたね。";
+  } else {
+    saveMistake(item);
+    mistakesThisRun.push(item);
+    $("feedback").className = "feedback bad";
+    $("feedback").textContent = `正解は「${item.en}」だよ。もう一度つづりを確認しよう！`;
+    $("guideMessage").textContent = "間違えた単語は復習リストに保存したよ。";
+  }
+
+  $("scoreLabel").textContent = `正解 ${correctCount}`;
+  $("nextBtn").textContent = current === questions.length - 1 ? "結果を見る →" : "次の問題 →";
+}
+
+function nextQuestion() {
+  if (!answered) return;
+  current++;
+  if (current >= questions.length) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+// 入力フォームのイベントを共通処理に接続
+function bindControls() {
+  $("startBtn").addEventListener("click", startQuiz);
+  $("answerForm").addEventListener("submit", event => {
+    event.preventDefault();
+    checkAnswer();
+  });
+  $("nextBtn").addEventListener("click", nextQuestion);
+}
+
+bindControls();
+updateStats();
+</script>
+</body>
+</html>
