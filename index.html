@@ -1,61 +1,231 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#6558e8">
-<title>英単語クエスト｜中学英語をゲームで攻略</title>
+<title>英単語クエスト</title>
 <style>
-:root{--ink:#202344;--muted:#777b99;--purple:#6558e8;--pink:#ff719b;--mint:#5bd6b0;--bg:#f5f5ff;--card:#fff}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 5%,#e8e5ff 0,transparent 28%),radial-gradient(circle at 90% 20%,#ffe5ef 0,transparent 25%),var(--bg);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);min-height:100vh}
-button,select,input{font:inherit}button{cursor:pointer;border:0;border-radius:14px;font-weight:800;transition:transform .12s,filter .12s}button:active{transform:scale(.98)}.wrap{max-width:1050px;margin:auto;padding:18px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.brand{display:flex;align-items:center;gap:10px;font-weight:1000;font-size:1.15rem}.logo{display:grid;place-items:center;width:45px;height:45px;border-radius:15px;background:linear-gradient(135deg,var(--purple),#a18aff);color:white;font-size:1.5rem;box-shadow:0 7px 18px #6558e844}.stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.pill{background:white;padding:9px 13px;border-radius:999px;font-weight:850;box-shadow:0 4px 14px #30305c0c;font-size:.9rem}.pill b{color:var(--purple)}.hero{background:linear-gradient(125deg,#6558e8,#8873f6 60%,#b58aff);color:white;border-radius:28px;padding:28px;display:grid;grid-template-columns:1.3fr .7fr;gap:18px;align-items:center;box-shadow:0 16px 35px #6558e82b}.eyebrow{font-size:.8rem;letter-spacing:.12em;font-weight:900;opacity:.85}.hero h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.08;margin:10px 0}.hero p{opacity:.92;line-height:1.7;margin:10px 0 20px}.hero-art{text-align:center;font-size:clamp(5rem,13vw,9rem);filter:drop-shadow(0 12px 10px #3c2d7d44)}.primary{background:#ffdf67;color:#4c3b00;padding:14px 22px;box-shadow:0 5px 0 #d9b943}.secondary{background:#eeecff;color:#5549d2;padding:12px 16px}.light{background:white;color:var(--ink);padding:12px 16px;border:1px solid #e7e7f5}.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:26px 2px 12px}.section-head h2{margin:0;font-size:1.25rem}.section-head small{color:var(--muted)}.modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.mode{background:var(--card);border:2px solid transparent;border-radius:22px;padding:20px;box-shadow:0 8px 22px #34345c0b;display:flex;flex-direction:column;gap:8px}.mode .emoji{font-size:2rem}.mode h3{margin:0;font-size:1.1rem}.mode p{color:var(--muted);margin:0;line-height:1.5;font-size:.92rem}.mode button{margin-top:8px}.mode.pink{background:linear-gradient(145deg,#fff,#fff1f6)}.mode.green{background:linear-gradient(145deg,#fff,#eafff7)}.progress-card{background:white;border-radius:22px;padding:18px;margin-top:14px;box-shadow:0 8px 22px #34345c0b}.progress-row{display:flex;justify-content:space-between;gap:12px;font-weight:800}.bar{height:12px;background:#eeeefa;border-radius:999px;overflow:hidden;margin:12px 0 6px}.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--mint),#43b9e8);border-radius:999px;transition:width .3s}.foot{text-align:center;color:#898ba5;font-size:.8rem;padding:25px 5px}.panel{display:none;background:white;border-radius:26px;padding:clamp(18px,4vw,32px);box-shadow:0 12px 35px #34345c12;margin-top:18px}.panel.active{display:block}.quiz-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.tag{background:#f0efff;color:#5a4ed5;border-radius:999px;padding:7px 12px;font-weight:850;font-size:.85rem}.question{font-size:clamp(2.2rem,7vw,4rem);font-weight:1000;text-align:center;margin:26px 0 8px;overflow-wrap:anywhere}.hint{text-align:center;color:var(--muted);margin-bottom:22px}.answers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.answer{padding:16px 12px;background:#f7f7ff;border:2px solid #e9e8fb;color:var(--ink);min-height:58px}.answer:hover{border-color:#a8a0ff}.answer.correct{background:#e1fff3;border-color:#45c99e;color:#08754f}.answer.wrong{background:#fff0f3;border-color:#ff719b;color:#b52c56}.feedback{min-height:30px;text-align:center;font-weight:900;margin:15px 0}.nextrow{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.spellrow{display:flex;gap:9px;max-width:520px;margin:auto}.spellrow input{min-width:0;flex:1;border:2px solid #e4e2f8;border-radius:14px;padding:14px;font-size:1.1rem;outline:none}.spellrow input:focus{border-color:var(--purple)}.hidden{display:none!important}.result{text-align:center;padding:15px}.result .big{font-size:4rem}.result h2{font-size:2rem}.result p{color:var(--muted);line-height:1.7}.setting{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.setting select{padding:10px;border:1px solid #e2e1f4;border-radius:12px;background:#fff;color:var(--ink)}.review-list{display:grid;gap:8px}.review-item{display:flex;justify-content:space-between;gap:12px;padding:12px;background:#f8f8ff;border-radius:12px}.review-item small{color:var(--muted)}@media(max-width:650px){.wrap{padding:12px}.hero{grid-template-columns:1fr;padding:23px}.hero-art{display:none}.modes{grid-template-columns:1fr}.stats{gap:5px}.pill{padding:7px 9px;font-size:.78rem}.answers{grid-template-columns:1fr}.answer{min-height:52px}.top{align-items:flex-start}.brand{font-size:1rem}.spellrow{flex-direction:column}.spellrow button{padding:14px}}
+:root {
+  --purple:#6558e8;
+  --pink:#ff719b;
+  --mint:#5bd6b0;
+  --bg:#f5f5ff;
+  --ink:#202344;
+  --muted:#777b99;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  min-height:100vh;
+  color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 10% 5%,#e8e5ff,transparent 30%),
+    radial-gradient(circle at 90% 20%,#ffe5ef,transparent 28%),
+    var(--bg);
+}
+button,a { font:inherit; }
+.wrap { max-width:1000px; margin:auto; padding:18px; }
+header {
+  display:flex; justify-content:space-between;
+  align-items:center; gap:12px; margin-bottom:22px;
+}
+.brand { display:flex; align-items:center; gap:10px; font-weight:900; }
+.logo {
+  display:grid; place-items:center; width:46px; height:46px;
+  border-radius:15px; color:white; font-size:1.5rem;
+  background:linear-gradient(135deg,var(--purple),#a18aff);
+}
+.stats { display:flex; gap:8px; flex-wrap:wrap; }
+.pill {
+  background:white; border-radius:999px; padding:9px 12px;
+  box-shadow:0 4px 14px #30305c0c; font-weight:800;
+}
+.pill b { color:var(--purple); }
+.hero {
+  padding:30px; border-radius:28px; color:white;
+  background:linear-gradient(125deg,#6558e8,#8873f6 60%,#b58aff);
+  box-shadow:0 16px 35px #6558e82b;
+}
+.eyebrow { font-size:.8rem; font-weight:900; letter-spacing:.1em; }
+h1 { font-size:clamp(2rem,6vw,3.5rem); line-height:1.15; margin:12px 0; }
+.hero p { line-height:1.8; }
+.hero-art { text-align:right; font-size:3.5rem; }
+.section-head { margin:28px 2px 14px; }
+.section-head h2 { margin:0 0 5px; }
+.section-head p { margin:0; color:var(--muted); }
+.levels { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.card {
+  background:white; border-radius:24px; padding:23px;
+  box-shadow:0 8px 22px #34345c0b; border:2px solid transparent;
+}
+.card.junior { background:linear-gradient(145deg,#fff,#eafff7); }
+.card.high { background:linear-gradient(145deg,#fff,#fff0f6); }
+.card .emoji { font-size:2.8rem; }
+.card h3 { margin:8px 0; font-size:1.35rem; }
+.card p { color:var(--muted); line-height:1.7; min-height:52px; }
+.features { display:flex; flex-wrap:wrap; gap:7px; margin:14px 0 20px; }
+.features span {
+  background:#f0efff; color:#5a4ed5;
+  padding:6px 9px; border-radius:999px; font-size:.8rem; font-weight:800;
+}
+.btn {
+  display:block; width:100%; padding:14px; text-align:center;
+  text-decoration:none; border-radius:14px; font-weight:900;
+  border:0; cursor:pointer;
+}
+.btn-junior { background:var(--mint); color:#124d3d; }
+.btn-high { background:var(--pink); color:#64223a; }
+.btn:hover { filter:brightness(.97); transform:translateY(-1px); }
+.talk {
+  display:flex; align-items:center; gap:14px;
+  margin-top:18px; padding:17px; background:white;
+  border-radius:20px; box-shadow:0 8px 22px #34345c0b;
+}
+.talk-icon { font-size:2.2rem; }
+.talk p { margin:4px 0 0; color:var(--muted); line-height:1.6; }
+.progress {
+  margin-top:16px; padding:20px; background:white;
+  border-radius:20px; box-shadow:0 8px 22px #34345c0b;
+}
+.progress-top { display:flex; justify-content:space-between; gap:10px; font-weight:800; }
+.bar { height:12px; margin:12px 0 7px; background:#eeeefa; border-radius:99px; overflow:hidden; }
+.bar span { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--mint),#43b9e8); }
+small { color:var(--muted); }
+footer { text-align:center; padding:25px 5px; color:#898ba5; font-size:.8rem; }
+@media(max-width:650px) {
+  .wrap { padding:12px; }
+  header { align-items:flex-start; }
+  .levels { grid-template-columns:1fr; }
+  .hero { padding:23px; }
+  .pill { padding:7px 9px; font-size:.8rem; }
+  .card p { min-height:0; }
+}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header class="top"><div class="brand"><div class="logo">⚔️</div><div>英単語クエスト<small style="display:block;color:#8586a3;font-size:.7rem;font-weight:700">JUNIOR ENGLISH RPG</small></div></div><div class="stats"><div class="pill">⭐ Lv.<b id="level">1</b></div><div class="pill">💎 <b id="xp">0</b> XP</div><div class="pill">🔥 <b id="streak">0</b></div></div></header>
-<section id="home">
-<div class="hero"><div><div class="eyebrow">YOUR ENGLISH ADVENTURE STARTS HERE</div><h1>英単語を攻略して<br>レベルアップ！</h1><p>中学3年間の英単語を、クイズとスペル入力で楽しくマスターしよう。きみの冒険がここから始まる！</p><button class="primary" onclick="startGame('quiz')">冒険をはじめる ▶</button></div><div class="hero-art">🧙‍♂️📚</div></div>
-<div class="section-head"><h2>🎮 トレーニングを選ぼう</h2><small>いつでも切り替えOK</small></div>
-<div class="modes">
-<div class="mode"><div class="emoji">🧠</div><h3>4択クイズ</h3><p>英単語の意味を4つの選択肢から選ぼう。テンポよく知識をチェック！</p><button class="secondary" onclick="startGame('quiz')">クイズに挑戦 →</button></div>
-<div class="mode pink"><div class="emoji">⌨️</div><h3>スペルチャレンジ</h3><p>日本語を見て英単語を入力。正しいスペルを身につけよう。</p><button class="secondary" onclick="startGame('spell')">スペルに挑戦 →</button></div>
-<div class="mode green"><div class="emoji">🔁</div><h3>まちがい復習</h3><p>苦手な単語をまとめて再チャレンジ。間違えた問題を得点チャンスに！</p><button class="secondary" onclick="startGame('review')">復習をはじめる →</button></div>
-<div class="mode"><div class="emoji">📖</div><h3>単語帳</h3><p>収録単語を一覧で確認。学年で絞り込んで予習・復習しよう。</p><button class="secondary" onclick="location.href='vocab.html'">単語帳を見る →</button></div>
-<div class="mode"><div class="emoji">🎓</div><h3>シス単 Quest</h3><p>高校生向け。単語番号で範囲を指定して学習しよう。</p><button class="secondary" onclick="location.href='systan.html'">シス単を開く →</button></div>
-</div>
-<div class="progress-card"><div class="progress-row"><span>🏆 次のレベルまで</span><span id="progressText">0 / 100 XP</span></div><div class="bar"><span id="progressBar"></span></div><small style="color:var(--muted)">正解するとXPを獲得！進捗と苦手単語はこのブラウザに保存されるよ。</small></div>
-</section>
-<section id="game" class="panel">
-<div class="quiz-top"><button class="light" onclick="goHome()">← ホーム</button><div class="setting"><label for="grade">学年：</label><select id="grade" onchange="changeGrade()"><option value="all">全学年</option><option value="1">中1</option><option value="2">中2</option><option value="3">中3</option></select><span class="tag" id="modeTag">4択クイズ</span></div><span class="tag" id="count">1 / 10</span></div>
-<div id="playArea"><div class="question" id="question">apple</div><div class="hint" id="hint">日本語の意味を選ぼう</div><div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite"></div><div class="nextrow"><button id="next" class="primary hidden" onclick="nextQuestion()">次の問題 →</button></div></div>
-<div id="result" class="result hidden"><div class="big" id="resultEmoji">🏆</div><h2 id="resultTitle">クエストクリア！</h2><p id="resultText"></p><button class="primary" onclick="startGame(lastMode)">もう一度プレイ</button> <button class="light" onclick="goHome()">ホームへ</button></div>
-</section>
 
-<div class="foot">英単語クエスト · 学習用の非公式アプリ · 学習データはこのブラウザ内に保存されます</div>
+<header>
+  <div class="brand">
+    <div class="logo">⚔️</div>
+    <div>
+      英単語クエスト
+      <small style="display:block">ENGLISH WORD RPG</small>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="pill">⭐ Lv.<b id="level">1</b></div>
+    <div class="pill">💎 <b id="xp">0</b> XP</div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow">YOUR ADVENTURE STARTS HERE</div>
+    <h1>英単語を攻略して<br>レベルアップ！</h1>
+    <p>毎日の学習をクエストにしよう！<br>
+    自分に合ったレベルを選んで、英単語マスターを目指そう。</p>
+    <div class="hero-art">🧙‍♂️ 📚 ✨</div>
+  </section>
+
+  <div class="section-head">
+    <h2>🎮 学習するレベルを選ぼう</h2>
+    <p>どちらからでも挑戦できるよ！</p>
+  </div>
+
+  <section class="levels">
+    <article class="card junior">
+      <div class="emoji">🌱 📗</div>
+      <h3>中学生版</h3>
+      <p>中学英語の基礎から高校入試対策まで。英単語を楽しく身につけよう！</p>
+      <div class="features">
+        <span>🧠 4択クイズ</span>
+        <span>⌨️ スペル</span>
+        <span>🔁 間違い復習</span>
+        <span>📖 単語帳</span>
+      </div>
+      <a class="btn btn-junior" href="junior.html">中学生版をはじめる →</a>
+    </article>
+
+    <article class="card high">
+      <div class="emoji">🚀 📘</div>
+      <h3>高校生版・シス単</h3>
+      <p>システム英単語の番号で学習範囲を指定。大学受験に向けて語彙力を鍛えよう！</p>
+      <div class="features">
+        <span>🧠 4択クイズ</span>
+        <span>⌨️ スペル</span>
+        <span>🔁 間違い復習</span>
+        <span>📖 単語帳</span>
+      </div>
+      <a class="btn btn-high" href="highschool.html">高校生版をはじめる →</a>
+    </article>
+  </section>
+
+  <section class="talk">
+    <div class="talk-icon">🧙‍♂️</div>
+    <div>
+      <strong>冒険ガイドからのひとこと</strong>
+      <p id="message">毎日少しずつで大丈夫！まずは好きなモードから始めてみよう。✨</p>
+    </div>
+  </section>
+
+  <section class="progress">
+    <div class="progress-top">
+      <span>🏆 次のレベルまで</span>
+      <span id="progressText">0 / 100 XP</span>
+    </div>
+    <div class="bar"><span id="progressBar"></span></div>
+    <small>学習ページで獲得した経験値をホーム画面にも表示するよ。</small>
+  </section>
+</main>
+
+<footer>
+  英単語クエスト · 学習サポート用サイト
+</footer>
 </div>
+
 <script>
-const WORDS = [
-["I","私","1"],["you","あなた","1"],["he","彼","1"],["she","彼女","1"],["we","私たち","1"],["they","彼ら","1"],["it","それ","1"],["this","これ","1"],["that","あれ・それ","1"],["who","だれ","1"],["what","何","1"],["when","いつ","1"],["where","どこ","1"],["why","なぜ","1"],["how","どのように","1"],["which","どちら・どれ","1"],["whose","だれの","2"],["whose","だれのもの","3"],["a","1つの（母音の前以外）","1"],["an","1つの（母音の前）","1"],["the","その","1"],["and","そして","1"],["but","しかし","1"],["or","または","1"],["because","なぜなら","2"],["if","もし〜なら","2"],["so","だから","2"],["with","〜と一緒に","1"],["without","〜なしで","2"],["for","〜のために","1"],["from","〜から","1"],["to","〜へ","1"],["in","〜の中に","1"],["on","〜の上に","1"],["under","〜の下に","1"],["between","〜の間に","2"],["behind","〜の後ろに","2"],["before","〜の前に","2"],["after","〜の後に","2"],["about","〜について","1"],["around","〜の周りに","2"],["through","〜を通って","3"],["during","〜の間","3"],["over","〜の上方に","2"],["into","〜の中へ","2"],["by","〜によって・そばに","2"],["at","〜で・に","1"],["of","〜の","1"],["as","〜として","2"],["be","〜である","1"],["am","〜です（Iと使う）","1"],["is","〜です（he/she/itと使う）","1"],["are","〜です（you/we/theyと使う）","1"],["was","〜だった","2"],["were","〜だった","2"],["been","〜だった・〜にいた","3"],["have","持っている","1"],["has","持っている（三人称）","1"],["had","持っていた","2"],["do","する","1"],["does","する（三人称）","1"],["did","した","2"],["go","行く","1"],["come","来る","1"],["get","手に入れる","1"],["make","作る","1"],["take","取る・連れていく","1"],["give","与える","1"],["see","見る","1"],["look","見る","1"],["watch","じっと見る","1"],["hear","聞こえる","1"],["listen","注意して聞く","1"],["speak","話す","1"],["talk","話す","1"],["say","言う","1"],["tell","伝える","1"],["know","知っている","1"],["think","考える","1"],["understand","理解する","2"],["learn","学ぶ","1"],["study","勉強する","1"],["teach","教える","1"],["read","読む","1"],["write","書く","1"],["speak","話す","1"],["eat","食べる","1"],["drink","飲む","1"],["cook","料理する","1"],["buy","買う","1"],["sell","売る","2"],["pay","支払う","2"],["use","使う","1"],["need","必要とする","1"],["want","欲しい・〜したい","1"],["like","好きである","1"],["love","大好きである","1"],["enjoy","楽しむ","1"],["help","助ける","1"],["work","働く","1"],["play","遊ぶ・競技する","1"],["run","走る","1"],["walk","歩く","1"],["swim","泳ぐ","1"],["dance","踊る","1"],["sing","歌う","1"],["sleep","眠る","1"],["wake","目を覚ます","2"],["live","住む・生きる","1"],["stay","滞在する","2"],["leave","去る・出発する","2"],["arrive","到着する","2"],["start","始める","1"],["finish","終える","1"],["begin","始める","2"],["stop","止まる・止める","1"],["keep","保つ・続ける","2"],["bring","持ってくる","2"],["carry","運ぶ","2"],["send","送る","2"],["show","見せる","1"],["find","見つける","1"],["lose","失う・負ける","2"],["meet","会う","1"],["visit","訪れる","1"],["call","電話する・呼ぶ","1"],["ask","尋ねる","1"],["answer","答える","1"],["wait","待つ","1"],["remember","覚えている","2"],["forget","忘れる","2"],["hope","望む","2"],["try","試す","2"],["practice","練習する","1"],["change","変える・変わる","2"],["move","動く・引っ越す","2"],["turn","曲がる・回す","1"],["follow","ついていく","2"],["win","勝つ","2"],["lose","負ける・失う","2"],["grow","成長する・育つ","2"],["become","〜になる","2"],["feel","感じる","2"],["believe","信じる","2"],["decide","決める","2"],["plan","計画する","2"],["choose","選ぶ","2"],["explain","説明する","2"],["improve","改善する","3"],["develop","発達する・開発する","3"],["discover","発見する","3"],["invent","発明する","3"],["create","創造する","3"],["protect","守る","3"],["support","支える・支持する","3"],["continue","続ける","3"],["return","戻る・返す","2"],["happen","起こる","2"],["seem","〜のように思われる","3"],["mean","意味する","2"],["hope","望む","2"],["decide","決める","2"],["important","重要な","1"],["interesting","おもしろい","1"],["beautiful","美しい","1"],["cute","かわいい","1"],["kind","親切な","1"],["friendly","友好的な","1"],["funny","おもしろい・こっけいな","1"],["happy","幸せな","1"],["sad","悲しい","1"],["angry","怒った","2"],["tired","疲れた","1"],["busy","忙しい","1"],["free","自由な・無料の","1"],["easy","簡単な","1"],["difficult","難しい","1"],["hard","難しい・一生懸命に","2"],["fast","速い","1"],["slow","遅い","1"],["early","早い","1"],["late","遅い","1"],["young","若い","1"],["old","年をとった・古い","1"],["new","新しい","1"],["long","長い","1"],["short","短い","1"],["tall","背が高い","1"],["high","高い","1"],["low","低い","2"],["big","大きい","1"],["large","大きい","1"],["small","小さい","1"],["little","小さい・少しの","1"],["strong","強い","2"],["weak","弱い","2"],["healthy","健康な","2"],["sick","病気の","1"],["hot","暑い・熱い","1"],["cold","寒い・冷たい","1"],["warm","暖かい","1"],["cool","涼しい・かっこいい","1"],["rainy","雨降りの","1"],["sunny","晴れた","1"],["cloudy","曇った","1"],["windy","風の強い","1"],["famous","有名な","2"],["popular","人気のある","2"],["different","異なる","2"],["same","同じ","1"],["special","特別な","2"],["usual","いつもの","2"],["possible","可能な","2"],["sure","確信して","2"],["ready","準備ができた","2"],["careful","注意深い","2"],["dangerous","危険な","2"],["safe","安全な","2"],["useful","役に立つ","2"],["rich","裕福な","2"],["poor","貧しい","2"],["true","本当の","2"],["real","本物の","2"],["only","唯一の・〜だけ","1"],["also","〜もまた","1"],["always","いつも","1"],["usually","たいてい","1"],["often","よく","1"],["sometimes","ときどき","1"],["never","決して〜ない","1"],["already","すでに","2"],["still","まだ・それでも","2"],["yet","まだ・もう","2"],["again","再び","1"],["together","一緒に","1"],["maybe","たぶん","2"],["probably","おそらく","3"],["really","本当に","1"],["very","とても","1"],["too","〜もまた・〜すぎる","1"],["enough","十分に","2"],["almost","ほとんど","2"],["each","それぞれの","2"],["every","すべての","1"],["both","両方","2"],["another","もう1つの","2"],["other","ほかの","1"],["many","たくさんの（数）","1"],["much","たくさんの（量）","1"],["few","少しの（数）","2"],["little","少しの（量）","2"],["more","もっと多くの","1"],["most","最も多くの","2"],["best","最もよい","1"],["better","よりよい","2"],["favorite","お気に入りの","1"],["school","学校","1"],["class","クラス・授業","1"],["teacher","先生","1"],["student","生徒","1"],["friend","友達","1"],["family","家族","1"],["parent","親","1"],["child","子ども","1"],["people","人々","1"],["person","人","2"],["man","男性","1"],["woman","女性","1"],["boy","男の子","1"],["girl","女の子","1"],["baby","赤ちゃん","1"],["name","名前","1"],["age","年齢","1"],["country","国","1"],["city","都市","1"],["town","町","1"],["world","世界","1"],["language","言語","1"],["English","英語","1"],["Japanese","日本語・日本人の","1"],["history","歴史","2"],["science","科学","2"],["math","数学","1"],["music","音楽","1"],["art","美術・芸術","1"],["sports","スポーツ","1"],["soccer","サッカー","1"],["baseball","野球","1"],["basketball","バスケットボール","1"],["tennis","テニス","1"],["game","ゲーム","1"],["book","本","1"],["story","物語","1"],["picture","絵・写真","1"],["movie","映画","1"],["song","歌","1"],["food","食べ物","1"],["breakfast","朝食","1"],["lunch","昼食","1"],["dinner","夕食","1"],["bread","パン","1"],["rice","米・ご飯","1"],["meat","肉","1"],["fish","魚","1"],["vegetable","野菜","1"],["fruit","果物","1"],["water","水","1"],["milk","牛乳","1"],["coffee","コーヒー","1"],["tea","お茶","1"],["apple","りんご","1"],["orange","オレンジ","1"],["banana","バナナ","1"],["animal","動物","1"],["dog","犬","1"],["cat","猫","1"],["bird","鳥","1"],["horse","馬","1"],["flower","花","1"],["tree","木","1"],["mountain","山","1"],["river","川","1"],["sea","海","1"],["beach","浜辺","1"],["nature","自然","2"],["weather","天気","1"],["season","季節","1"],["spring","春","1"],["summer","夏","1"],["autumn","秋","1"],["winter","冬","1"],["morning","朝","1"],["afternoon","午後","1"],["evening","夕方","1"],["night","夜","1"],["today","今日","1"],["tomorrow","明日","1"],["yesterday","昨日","1"],["week","週","1"],["month","月","1"],["year","年","1"],["minute","分","1"],["hour","時間","1"],["time","時間","1"],["day","日","1"],["Monday","月曜日","1"],["Tuesday","火曜日","1"],["Wednesday","水曜日","1"],["Thursday","木曜日","1"],["Friday","金曜日","1"],["Saturday","土曜日","1"],["Sunday","日曜日","1"],["January","1月","1"],["February","2月","1"],["March","3月","1"],["April","4月","1"],["May","5月","1"],["June","6月","1"],["July","7月","1"],["August","8月","1"],["September","9月","1"],["October","10月","1"],["November","11月","1"],["December","12月","1"],["one","1","1"],["two","2","1"],["three","3","1"],["four","4","1"],["five","5","1"],["six","6","1"],["seven","7","1"],["eight","8","1"],["nine","9","1"],["ten","10","1"],["first","最初の・1番目","1"],["second","2番目の","1"],["third","3番目の","1"],["hundred","100","2"],["thousand","1000","2"],["money","お金","1"],["price","値段","1"],["shop","店","1"],["store","店","2"],["restaurant","レストラン","1"],["station","駅","1"],["library","図書館","1"],["hospital","病院","1"],["park","公園","1"],["museum","博物館","2"],["hotel","ホテル","1"],["airport","空港","1"],["train","電車","1"],["bus","バス","1"],["car","車","1"],["bicycle","自転車","1"],["plane","飛行機","1"],["ticket","切符・チケット","1"],["trip","旅行","1"],["travel","旅行する","1"],["map","地図","1"],["road","道路","1"],["left","左","1"],["right","右","1"],["straight","まっすぐな","2"],["corner","角","2"],["way","道・方法","1"],["home","家","1"],["house","家（建物）","1"],["room","部屋","1"],["kitchen","台所","1"],["door","ドア","1"],["window","窓","1"],["desk","机","1"],["chair","いす","1"],["bed","ベッド","1"],["computer","コンピューター","1"],["phone","電話","1"],["internet","インターネット","2"],["email","電子メール","1"],["message","メッセージ","2"],["photo","写真","1"],["camera","カメラ","1"],["problem","問題","2"],["question","質問・問題","1"],["idea","考え・アイデア","1"],["reason","理由","2"],["example","例","2"],["fact","事実","3"],["information","情報","3"],["news","ニュース","2"],["future","未来","2"],["past","過去","2"],["life","生活・人生","1"],["dream","夢","1"],["job","仕事","1"],["company","会社","2"],["business","ビジネス","3"],["money","お金","1"],["energy","エネルギー","3"],["environment","環境","3"],["earth","地球","2"],["space","宇宙・空間","2"],["planet","惑星","3"],["culture","文化","3"],["tradition","伝統","3"],["peace","平和","2"],["war","戦争","2"],["freedom","自由","3"],["community","地域社会","3"],["volunteer","ボランティア","2"],["experience","経験","2"],["chance","機会","2"],["challenge","挑戦","3"],["success","成功","3"],["effort","努力","3"],["goal","目標","2"],["team","チーム","1"],["member","一員","2"],["leader","リーダー","2"],["rule","規則","1"],["custom","習慣・慣習","3"],["health","健康","2"],["exercise","運動","2"],["medicine","薬・医学","2"],["hospital","病院","1"],["body","体","1"],["head","頭","1"],["face","顔","1"],["hand","手","1"],["foot","足","1"],["heart","心臓・心","2"],["voice","声","1"],["smile","ほほえむ・笑顔","1"],["tear","涙","2"],["feeling","気持ち","2"],["mind","心・精神","2"],["thought","考え","3"],["kindness","親切","3"],["respect","尊敬する・尊重","3"],["agree","賛成する","2"],["disagree","反対する","3"],["opinion","意見","2"],["discuss","話し合う","3"],["introduce","紹介する","2"],["invite","招待する","2"],["offer","申し出る","3"],["promise","約束する","2"],["allow","許す","3"],["accept","受け入れる","3"],["refuse","断る","3"],["prepare","準備する","2"],["borrow","借りる","2"],["lend","貸す","2"],["spend","費やす・過ごす","2"],["save","救う・節約する","2"],["cost","費用がかかる","2"],["order","注文する・命令","2"],["share","共有する","2"],["join","参加する","2"],["invite","招待する","2"],["build","建てる","2"],["break","壊す・休憩する","2"],["cut","切る","1"],["wear","身につけている","2"],["put","置く","1"],["set","置く・設定する","2"],["hold","持つ・開催する","2"],["catch","捕まえる","2"],["throw","投げる","2"],["hit","打つ","2"],["fall","落ちる","2"],["rise","上がる","3"],["fly","飛ぶ","1"],["drive","運転する","1"],["ride","乗る","1"],["climb","登る","2"],["cross","横切る・渡る","2"],["pass","通る・合格する","2"],["reach","到着する・届く","3"],["enter","入る","2"],["exit","出口・退出する","2"],["return","戻る・返す","2"],["escape","逃げる","3"],["appear","現れる","3"],["disappear","消える","3"],["hurry","急ぐ","2"],["relax","くつろぐ","2"],["rest","休む","1"],["hurt","痛む・傷つける","2"],["die","死ぬ","2"],["born","生まれた","2"],["marry","結婚する","2"],["raise","育てる・上げる","3"],["pick","選ぶ・摘む","2"],["collect","集める","2"],["check","確認する","1"],["search","探す","2"],["look for","探す","2"],["find out","調べて分かる","3"],["take care of","世話をする","2"],["look like","〜のように見える","2"],["be interested in","〜に興味がある","2"],["be good at","〜が得意だ","1"],["be different from","〜と異なる","2"],["have to","〜しなければならない","2"],["be able to","〜できる","2"],["used to","以前はよく〜した","3"],["one day","ある日・いつか","2"],["for example","例えば","2"],["in fact","実際は","3"],["at first","最初は","2"],["at last","ついに","2"],["as soon as","〜するとすぐに","3"],["more than","〜より多く","2"],["less than","〜より少なく","3"],["each other","お互い","2"],["all over the world","世界中で","2"],["a lot of","たくさんの","1"],["of course","もちろん","1"],["by the way","ところで","2"],["in front of","〜の前に","1"],["next to","〜の隣に","1"],["because of","〜のために","2"],["instead of","〜の代わりに","3"],["such as","〜のような","3"],["take a picture","写真を撮る","1"],["make friends","友達になる","1"],["do one's best","ベストを尽くす","2"],["look forward to","〜を楽しみに待つ","3"],["take part in","〜に参加する","3"],["be proud of","〜を誇りに思う","3"],["be famous for","〜で有名だ","2"],["be full of","〜でいっぱいだ","2"],["be made of","〜でできている","3"],["be surprised at","〜に驚く","3"]
-].map((w,i)=>({en:w[0],ja:w[1],g:w[2],id:i}));
-const $=id=>document.getElementById(id);
-let data={xp:0,streak:0,best:0,wrong:[],correct:0,answered:0};try{data={...data,...JSON.parse(localStorage.getItem('eigoQuestSave')||'{}')}}catch(e){}
-let pool=[],queue=[],idx=0,score=0,locked=false,lastMode='quiz',current=null,gameGrade='all',reviewSession=false;
-function save(){try{localStorage.setItem('eigoQuestSave',JSON.stringify(data))}catch(e){} updateStats()}
-function updateStats(){$('xp').textContent=data.xp;$('streak').textContent=data.streak;$('level').textContent=Math.floor(data.xp/100)+1;$('progressText').textContent=(data.xp%100)+' / 100 XP';$('progressBar').style.width=(data.xp%100)+'%'}
-function goHome(){ $('home').style.display='block';$('game').classList.remove('active');$('vocab').classList.remove('active');save()}
-function showPanel(id){$('home').style.display='none';$('game').classList.remove('active');$('vocab').classList.remove('active');$(id).classList.add('active')}
-function startGame(mode){lastMode=mode;gameGrade=$('grade').value;reviewSession=mode==='review';pool=WORDS.filter(w=>(gameGrade==='all'||w.g===gameGrade)&&(!reviewSession||data.wrong.includes(w.en)));if(reviewSession&&pool.length===0){alert('復習する単語はまだないよ！まずはクイズに挑戦してみよう。');return}if(pool.length<4&&mode==='quiz'){alert('この条件の単語数が少ないため、学年を「全学年」にしてね。');return}queue=shuffle([...pool]).slice(0,Math.min(10,pool.length));idx=0;score=0;locked=false;$('playArea').classList.remove('hidden');$('result').classList.add('hidden');$('modeTag').textContent=mode==='quiz'?'4択クイズ':mode==='spell'?'スペルチャレンジ':'まちがい復習';showPanel('game');renderQuestion()}
-function changeGrade(){if($('game').classList.contains('active'))startGame(lastMode)}
-function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function renderQuestion(){locked=false;current=queue[idx];$('count').textContent=`${idx+1} / ${queue.length}`;$('feedback').textContent='';$('next').classList.add('hidden');$('question').textContent=lastMode==='spell'?current.ja:current.en;$('hint').textContent=lastMode==='spell'?'英単語を入力しよう': '日本語の意味を選ぼう';$('answers').innerHTML='';if(lastMode==='spell'){$('answers').innerHTML='<form class="spellrow" id="spellForm"><input id="spellInput" autocomplete="off" autocapitalize="none" placeholder="英単語を入力…" aria-label="英単語を入力"><button class="secondary" type="submit">回答する</button></form>';$('spellForm').onsubmit=e=>{e.preventDefault();checkSpell()};$('spellInput').focus({preventScroll:true})}else{let choices=shuffle([current,...shuffle(pool.filter(w=>w.ja!==current.ja)).slice(0,3)]);choices.forEach(w=>{let b=document.createElement('button');b.className='answer';b.textContent=w.ja;b.onclick=()=>checkAnswer(w,b);$('answers').appendChild(b)})}}
-function markWrong(w){if(!data.wrong.includes(w.en))data.wrong.push(w.en)}
-function markCorrect(w){data.wrong=data.wrong.filter(x=>x!==w.en);data.correct++;data.streak++;data.best=Math.max(data.best,data.streak);data.xp+=10;score++}
-function endAnswer(ok,w){locked=true;data.answered++;if(ok){markCorrect(w);$('feedback').textContent='✨ 正解！ +10 XP';$('feedback').style.color='#13875f'}else{data.streak=0;markWrong(w);$('feedback').textContent='💡 正解は「'+w.en+'：'+w.ja+'」';$('feedback').style.color='#d3466d'}save();[...$('answers').querySelectorAll('button')].forEach(b=>b.disabled=true);$('next').classList.remove('hidden');$('next').textContent=idx===queue.length-1?'結果を見る 🏆':'次の問題 →'}
-function checkAnswer(w,b){if(locked)return;let ok=w.en===current.en;b.classList.add(ok?'correct':'wrong');if(!ok){[...$('answers').children].forEach(btn=>{if(btn.textContent===current.ja)btn.classList.add('correct')})}endAnswer(ok,current)}
-function checkSpell(){if(locked)return;let answer=$('spellInput').value.trim().toLowerCase().replace(/\s+/g,' ');let expected=current.en.toLowerCase();let ok=answer===expected; $('spellInput').disabled=true;endAnswer(ok,current)}
-function nextQuestion(){if(!locked)return;if(idx<queue.length-1){idx++;renderQuestion()}else showResult()}
-function showResult(){$('playArea').classList.add('hidden');$('result').classList.remove('hidden');let pct=Math.round(score/queue.length*100);$('resultEmoji').textContent=pct===100?'🏆':pct>=70?'🎉':'💪';$('resultTitle').textContent=pct===100?'パーフェクト！':pct>=70?'クエストクリア！':'冒険おつかれさま！';$('resultText').textContent=`${queue.length}問中 ${score}問正解（正答率 ${pct}%）！ ${score*10} XPを獲得したよ。${data.wrong.length?' 苦手単語は復習モードで再挑戦しよう！':' すばらしい！'}`}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-updateStats();
+/*
+ * 学習ページと共通のキーを使用する。
+ * 学習ページ側も同じ保存形式にそろえるとXPを共有できる。
+ */
+function loadProgress() {
+  try {
+    return JSON.parse(localStorage.getItem("eigoQuestSave") || "{}");
+  } catch {
+    return {};
+  }
+}
+
+function updateProgress() {
+  const data = loadProgress();
+  const xp = Number(data.xp) || 0;
+  const level = Math.floor(xp / 100) + 1;
+  const progress = xp % 100;
+
+  document.getElementById("xp").textContent = xp;
+  document.getElementById("level").textContent = level;
+  document.getElementById("progressText").textContent =
+    progress + " / 100 XP";
+  document.getElementById("progressBar").style.width =
+    progress + "%";
+
+  const messages = [
+    "毎日少しずつで大丈夫！今日も一歩進もう。✨",
+    "間違いは成長のチャンス！復習も活用しよう。💪",
+    "新しい単語を覚えて、英語マスターを目指そう！📚",
+    "昨日の自分より一歩前へ！君ならできる！🏆"
+  ];
+
+  document.getElementById("message").textContent =
+    messages[Math.floor(Date.now() / 86400000) % messages.length];
+}
+
+updateProgress();
+window.addEventListener("storage", updateProgress);
 </script>
-</body></html>
+</body>
+</html>
