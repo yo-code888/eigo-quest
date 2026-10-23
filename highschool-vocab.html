@@ -446,36 +446,42 @@ body {
     
 updateStats();
 
+
 async function loadWordsFromCSV() {
-  const response = await fetch("./words-highschool.csv");
+  const csvFiles = [
+    "./words-highschool.csv",
+    "./words-highschool-601-1200.csv"
+  ];
 
-  if (!response.ok) {
-    throw new Error("CSVを読み込めませんでした");
-  }
+  const groups = await Promise.all(
+    csvFiles.map(async file => {
+      const response = await fetch(file);
 
-  const csv = (await response.text()).replace(/^\uFEFF/, "");
-  const lines = csv.trim().split(/\r?\n/);
+      if (!response.ok) {
+        throw new Error(file + " を読み込めませんでした");
+      }
 
-  const loadedWords = lines.slice(1)
-    .filter(line => line.trim())
-    .map(line => {
-      const columns = line.split(",");
+      const csv = (await response.text()).replace(/^\uFEFF/, "");
+      const lines = csv.trim().split(/\r?\n/);
 
-      return {
-        number: columns[0].trim(),
-        en: columns[1].trim(),
-        ja: columns.slice(2).join(",").trim(),
-        ex: "",
-        exJa: ""
-      };
+      return lines.slice(1)
+        .filter(line => line.trim())
+        .map(line => {
+          const columns = line.split(",");
+
+          return {
+            number: columns[0].trim(),
+            en: columns[1].trim(),
+            ja: columns.slice(2).join(",").trim(),
+            ex: "",
+            exJa: ""
+          };
+        })
+        .filter(word => word.en && word.ja);
     })
-    .filter(word => word.en && word.ja);
+  );
 
-  if (loadedWords.length === 0) {
-    throw new Error("CSVに単語がありません");
-  }
-
-  WORDS = loadedWords;
+  WORDS = groups.flat();
   renderWords();
 }
 
@@ -483,6 +489,7 @@ loadWordsFromCSV().catch(error => {
   console.error(error);
   renderWords();
 });
+
 
   </script>
 </body>
