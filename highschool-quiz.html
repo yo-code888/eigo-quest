@@ -333,7 +333,7 @@ function makeQuestions() {
   });
 }
 
-function startQuiz(range = $("range").value) {
+function startQuiz() {
   questions = makeQuestions();
 
   if (!questions.length) {
@@ -500,10 +500,6 @@ $("homeBtn").addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-$("range").addEventListener("change", () => {
-  $("startBtn").textContent =
-    $("range").value === "mistakes" ? "復習クイズを始める" : "クイズを始める";
-});
 
 loadWords();
 </script>
