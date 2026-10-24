@@ -92,15 +92,23 @@ button:disabled { cursor:not-allowed; opacity:.55; }
       <div class="stat">復習リスト<strong id="mistakeCount">0語</strong></div>
     </div>
 
-    <label for="range">出題範囲</label>
-    <select id="range">
-      <option value="all">全1200語からランダム10問</option>
-      <option value="first">1〜600番からランダム10問</option>
-      <option value="second">601〜1200番からランダム10問</option>
-      <option value="mistakes">間違えた単語から出題</option>
-    </select>
-    <p class="small" id="loadStatus">単語データを読み込み中…</p>
-    <button class="primary" id="startBtn" disabled>クイズを始める</button>
+    
+<label for="startNumber">開始番号</label>
+<input id="startNumber" type="number" min="1" value="1"
+  style="width:100%;padding:13px;border:1px solid #d8dcef;border-radius:12px;">
+
+<label for="endNumber">終了番号</label>
+<input id="endNumber" type="number" min="1" value="1200"
+  style="width:100%;padding:13px;border:1px solid #d8dcef;border-radius:12px;">
+
+<label for="questionLimit">出題数</label>
+<input id="questionLimit" type="number" min="1" value="10"
+  style="width:100%;padding:13px;border:1px solid #d8dcef;border-radius:12px;">
+
+<p class="small" id="loadStatus">単語データを読み込み中…</p>
+<p class="small">指定した範囲から、入力した問題数をランダムに出題します。</p>
+<button class="primary" id="startBtn" disabled>クイズを始める</button>
+
   </section>
 
   <section id="quiz" class="panel hidden">
@@ -276,23 +284,43 @@ function pickRandom(items, count) {
   return copy.slice(0, Math.min(count, copy.length));
 }
 
-function makeQuestions(range) {
-  let pool = WORDS;
 
-  if (range === "first") {
-    pool = WORDS.filter(word => word.number >= 1 && word.number <= 600);
-  } else if (range === "second") {
-    pool = WORDS.filter(word => word.number >= 601 && word.number <= 1200);
-  } else if (range === "mistakes") {
-    const numbers = new Set(
-      getMistakes().map(item => Number(typeof item === "object" ? item.number : item))
-    );
-    pool = WORDS.filter(word => numbers.has(word.number));
+function makeQuestions() {
+  const start = Number($("startNumber").value);
+  const end = Number($("endNumber").value);
+  const limit = Number($("questionLimit").value);
+
+  if (
+    !Number.isInteger(start) ||
+    !Number.isInteger(end) ||
+    !Number.isInteger(limit) ||
+    start < 1 ||
+    end < start ||
+    limit < 1
+  ) {
+    alert("開始番号・終了番号・出題数を正しく入力してください。");
+    return [];
   }
 
-  return pickRandom(pool, 10).map(word => {
+  const pool = WORDS.filter(
+    word => word.number >= start && word.number <= end
+  );
+
+  if (!pool.length) {
+    alert("指定した範囲に単語がありません。番号を確認してください。");
+    return [];
+  }
+
+  if (limit > pool.length) {
+    alert(`指定範囲には ${pool.length} 語しかありません。出題数を減らしてください。`);
+    return [];
+  }
+
+  return pickRandom(pool, limit).map(word => {
     const distractors = pickRandom(
-      WORDS.filter(item => item.number !== word.number && item.ja !== word.ja),
+      WORDS.filter(
+        item => item.number !== word.number && item.ja !== word.ja
+      ),
       3
     );
 
@@ -306,8 +334,7 @@ function makeQuestions(range) {
 }
 
 function startQuiz(range = $("range").value) {
-  lastRange = range;
-  questions = makeQuestions(range);
+  questions = makeQuestions();
 
   if (!questions.length) {
     alert(range === "mistakes"
