@@ -3,441 +3,482 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#6558e8">
-<title>4択英単語クイズ｜高校生版・英単語クエスト</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英単語クイズ | Eigo Quest</title>
 <style>
-  
-/* 上部固定ナビゲーション */
-.common-top-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.96);
-  border-bottom: 1px solid #ddd;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.common-top-nav a,
-.common-top-nav button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 42px;
-  padding: 8px 16px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background: #fff;
-  color: #222;
-  font-size: 15px;
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-/* 固定ナビに本文が隠れないようにする */
-body {
-  padding-top: 68px;
-}
-
 :root {
-  --purple:#6558e8; --pink:#ff719b; --mint:#5bd6b0;
-  --bg:#f5f5ff; --ink:#202344; --muted:#777b99;
+  --bg:#f5f7ff; --card:#fff; --ink:#202642;
+  --muted:#6e7591; --primary:#5b67e8;
+  --good:#16845b; --bad:#c84252; --line:#e5e8f5;
 }
 * { box-sizing:border-box; }
 body {
-  margin:0; min-height:100vh; color:var(--ink);
+  margin:0; background:var(--bg); color:var(--ink);
   font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
-  background:radial-gradient(circle at 10% 5%,#e8e5ff,transparent 30%),
-    radial-gradient(circle at 90% 20%,#ffe5ef,transparent 28%),var(--bg);
 }
-button { font:inherit; }
-.wrap { max-width:820px; margin:auto; padding:18px; }
-header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:22px; }
-.brand { display:flex; align-items:center; gap:10px; font-weight:900; }
-.logo { display:grid; place-items:center; width:44px; height:44px; border-radius:14px; color:white; font-size:1.4rem; background:linear-gradient(135deg,var(--purple),#a18aff); }
-.stats { display:flex; gap:8px; flex-wrap:wrap; }
-.pill { background:white; border-radius:999px; padding:9px 12px; box-shadow:0 4px 14px #30305c0c; font-weight:800; }
-.pill b { color:var(--purple); }
-.hero { padding:24px; border-radius:25px; color:white; background:linear-gradient(125deg,#6558e8,#8873f6 60%,#b58aff); box-shadow:0 14px 30px #6558e82b; }
-.eyebrow { font-size:.78rem; font-weight:900; letter-spacing:.1em; }
-h1 { font-size:clamp(1.7rem,5vw,2.5rem); margin:10px 0; }
-.hero p { line-height:1.7; margin:0; }
-.panel { background:white; padding:22px; margin-top:18px; border-radius:23px; box-shadow:0 8px 22px #34345c0b; }
-.progress-row { display:flex; justify-content:space-between; gap:10px; font-size:.9rem; font-weight:800; color:var(--muted); }
-.progress { height:10px; background:#eeedfa; border-radius:999px; overflow:hidden; margin:10px 0 22px; }
-.bar { height:100%; width:0; background:linear-gradient(90deg,var(--purple),var(--pink)); transition:width .25s; }
-.question-label { color:var(--muted); font-weight:800; font-size:.9rem; }
-.question { font-size:clamp(1.8rem,6vw,2.6rem); font-weight:900; margin:12px 0 7px; overflow-wrap:anywhere; }
-.hint { color:var(--muted); margin-bottom:20px; }
-.options { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.option { text-align:left; border:2px solid #e9e7f8; border-radius:16px; background:#fcfbff; padding:16px; cursor:pointer; font-weight:800; min-height:65px; color:var(--ink); }
-.option:hover:not(:disabled) { border-color:var(--purple); background:#f3f0ff; }
-.option:disabled { cursor:default; }
-.option.correct { border-color:#37bd91; background:#e9fff6; }
-.option.wrong { border-color:#ff719b; background:#fff0f5; }
-.feedback { min-height:52px; margin-top:16px; padding:13px 15px; border-radius:14px; background:#f5f4ff; line-height:1.6; }
-.feedback.good { background:#e9fff6; }
-.feedback.bad { background:#fff0f5; }
-.actions { display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-top:16px; }
-.btn { border:0; border-radius:13px; padding:13px 18px; font-weight:900; cursor:pointer; }
-.btn-primary { background:var(--purple); color:white; }
-.btn-light { background:#f0efff; color:var(--purple); }
-.btn:disabled { opacity:.45; cursor:not-allowed; }
-.talk { display:flex; align-items:center; gap:12px; background:white; padding:15px; margin-top:18px; border-radius:18px; box-shadow:0 8px 22px #34345c0b; }
-.talk .icon { font-size:2rem; }
-.talk p { margin:4px 0 0; color:var(--muted); line-height:1.6; }
-.result { text-align:center; }
-.result-emoji { font-size:3.5rem; }
-.result h2 { font-size:1.8rem; margin:8px 0; }
-.score { font-size:2.5rem; color:var(--purple); font-weight:1000; }
-.mistake-list { text-align:left; padding-left:22px; line-height:1.9; }
-.links { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
-.link { display:inline-block; padding:12px 15px; border-radius:13px; background:white; font-weight:800; box-shadow:0 4px 14px #30305c0c; text-decoration:none; color:inherit; }
-footer { text-align:center; padding:25px 5px; color:#898ba5; font-size:.8rem; }
+header {
+  background:#fff; border-bottom:1px solid var(--line);
+  padding:14px 18px; position:sticky; top:0; z-index:5;
+}
+.nav {
+  max-width:900px; margin:auto; display:flex;
+  align-items:center; justify-content:space-between; gap:12px;
+}
+.brand { font-weight:850; font-size:1.1rem; color:var(--primary); text-decoration:none; }
+.nav a:last-child { color:var(--muted); text-decoration:none; }
+main { max-width:760px; margin:28px auto; padding:0 16px 48px; }
+.panel {
+  background:var(--card); border:1px solid var(--line);
+  border-radius:22px; padding:clamp(18px,4vw,30px);
+  box-shadow:0 10px 35px #28356b0c;
+}
+h1 { font-size:clamp(1.55rem,4vw,2.1rem); margin:0 0 8px; }
+.sub { color:var(--muted); margin:0 0 24px; line-height:1.7; }
+label { display:block; font-weight:750; margin:16px 0 8px; }
+select,button { font:inherit; }
+select {
+  width:100%; padding:13px 14px; border:1px solid #d8dcef;
+  border-radius:12px; background:#fff; color:var(--ink);
+}
+button { cursor:pointer; border:0; border-radius:12px; padding:13px 16px; font-weight:800; }
+button:disabled { cursor:not-allowed; opacity:.55; }
+.primary { background:var(--primary); color:#fff; width:100%; margin-top:18px; }
+.secondary { background:#eef0ff; color:var(--primary); }
+.stats { display:flex; gap:10px; flex-wrap:wrap; margin:0 0 20px; }
+.stat { background:#f0f2ff; border-radius:12px; padding:10px 13px; font-size:.9rem; }
+.stat strong { display:block; font-size:1.12rem; }
+.progress { height:9px; background:#e9ebf7; border-radius:99px; overflow:hidden; margin:15px 0 22px; }
+.progress span { height:100%; display:block; width:0; background:linear-gradient(90deg,#6674f0,#8d69ed); transition:width .2s; }
+.question { font-size:clamp(1.8rem,6vw,2.6rem); font-weight:850; text-align:center; margin:22px 0 8px; overflow-wrap:anywhere; }
+.question-meta { text-align:center; color:var(--muted); font-size:.9rem; }
+.answers { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:24px; }
+.answer {
+  background:#fff; border:1px solid var(--line); text-align:left;
+  min-height:68px; display:flex; align-items:center; gap:10px;
+}
+.answer:hover:not(:disabled) { border-color:var(--primary); background:#f8f8ff; }
+.answer .letter { background:#eef0ff; color:var(--primary); border-radius:8px; padding:5px 9px; flex:none; }
+.answer.correct { border-color:#6fc7a3; background:#effbf5; color:#116a49; }
+.answer.wrong { border-color:#e9a0a8; background:#fff2f3; color:#9f2737; }
+.feedback { margin-top:16px; border-radius:12px; padding:13px 15px; background:#f3f4fb; line-height:1.6; }
+.hidden { display:none !important; }
+.result-score { font-size:2.5rem; font-weight:900; color:var(--primary); margin:10px 0; }
+.result-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:20px; }
+.small { font-size:.9rem; color:var(--muted); line-height:1.6; }
 @media(max-width:520px) {
-  .wrap { padding:12px; } header { align-items:flex-start; }
-  .pill { padding:7px 9px; font-size:.8rem; }
-  .panel { padding:16px; }
-  .options { grid-template-columns:1fr; gap:9px; }
-  .option { min-height:55px; padding:13px; }
+  .answers,.result-actions { grid-template-columns:1fr; }
+  .stat { flex:1; min-width:90px; }
+  .panel { border-radius:17px; }
+  main { margin-top:18px; }
 }
 </style>
 </head>
 <body>
-  
-<nav class="common-top-nav">
-  <a href="index.html" class="nav-home">🏠 ホーム</a>
-  <button type="button" class="nav-back" onclick="history.back()">
-    ↩️ 戻る
-  </button>
-</nav>
-
-<div class="wrap">
 <header>
-  <div class="brand">
-    <div class="logo">⚔️</div>
-    <div>英単語クエスト<small style="display:block;color:#777b99">高校生版 · 4択クイズ</small></div>
-  </div>
-  <div class="stats">
-    <div class="pill">⭐ Lv.<b id="level">1</b></div>
-    <div class="pill">💎 <b id="xp">0</b> XP</div>
-  </div>
+  <nav class="nav">
+    <a class="brand" href="index.html">⚡ Eigo Quest</a>
+    <a href="highschool-vocab.html">単語一覧へ →</a>
+  </nav>
 </header>
 
-<section class="hero">
-  <div class="eyebrow">HIGH SCHOOL · WORD QUEST</div>
-  <h1>🎯 英単語4択チャレンジ</h1>
-  <p>英単語の意味を4つの選択肢から選ぼう！全10問。正解を重ねて経験値を獲得しよう。</p>
-</section>
+<main>
+  <section id="setup" class="panel">
+    <h1>英単語クイズ 🎯</h1>
+    <p class="sub">出題範囲を選んで、英単語をマスターしよう！<br>正解すると経験値（XP）がたまります。</p>
 
-<section class="panel" id="quizPanel">
-  <div class="progress-row">
-    <span id="questionCount">準備中...</span>
-    <span id="scoreLabel">正解 0</span>
-  </div>
-  <div class="progress"><div class="bar" id="progressBar"></div></div>
-
-  <div id="questionArea">
-    <div class="question-label">次の英単語の意味は？</div>
-    <div class="question" id="word">Ready?</div>
-    <div class="hint">最も適切な日本語を選択してください。</div>
-    <div class="options" id="options"></div>
-    <div class="feedback" id="feedback" aria-live="polite">準備ができたらスタート！</div>
-    <div class="actions">
-      <button class="btn btn-light" id="startBtn">クイズを開始</button>
-      <button class="btn btn-primary" id="nextBtn" disabled>次の問題 →</button>
+    <div class="stats">
+      <div class="stat">累計XP<strong id="totalXp">0 XP</strong></div>
+      <div class="stat">レベル<strong id="level">Lv.1</strong></div>
+      <div class="stat">復習リスト<strong id="mistakeCount">0語</strong></div>
     </div>
-  </div>
-</section>
 
-<section class="talk">
-  <div class="icon">🧙‍♂️</div>
-  <div>
-    <strong>冒険ガイドのアドバイス</strong>
-    <p id="guideMessage">わからない単語があっても大丈夫。間違えた単語は復習ページで確認できるよ！</p>
-  </div>
-</section>
+    <label for="range">出題範囲</label>
+    <select id="range">
+      <option value="all">全1200語からランダム10問</option>
+      <option value="first">1〜600番からランダム10問</option>
+      <option value="second">601〜1200番からランダム10問</option>
+      <option value="mistakes">間違えた単語から出題</option>
+    </select>
+    <p class="small" id="loadStatus">単語データを読み込み中…</p>
+    <button class="primary" id="startBtn" disabled>クイズを始める</button>
+  </section>
 
-<div class="links">
-  <a class="link" href="highschool.html">← 高校生版メニュー</a>
-  <a class="link" href="index.html">🏠 ホームに戻る</a>
-</div>
-<footer>英単語クエスト · 高校生版</footer>
-</div>
+  <section id="quiz" class="panel hidden">
+    <div class="stats">
+      <div class="stat">問題<strong id="questionCount">1 / 10</strong></div>
+      <div class="stat">正解<strong id="correctCount">0</strong></div>
+      <div class="stat">獲得XP<strong id="sessionXp">0 XP</strong></div>
+    </div>
+    <div class="progress"><span id="progressBar"></span></div>
+    <div class="question-meta" id="wordNumber"></div>
+    <div class="question" id="questionWord">word</div>
+    <div class="question-meta">正しい日本語の意味を選んでください</div>
+    <div id="answers" class="answers"></div>
+    <div id="feedback" class="feedback hidden" aria-live="polite"></div>
+    <button id="nextBtn" class="primary hidden">次の問題へ →</button>
+  </section>
+
+  <section id="result" class="panel hidden">
+    <h1>クイズ結果 🎉</h1>
+    <div class="result-score" id="resultScore">0 / 10</div>
+    <p id="resultMessage"></p>
+    <div class="stats">
+      <div class="stat">今回のXP<strong id="resultXp">0 XP</strong></div>
+      <div class="stat">累計XP<strong id="resultTotalXp">0 XP</strong></div>
+      <div class="stat">レベル<strong id="resultLevel">Lv.1</strong></div>
+    </div>
+    <div id="resultMistakes"></div>
+    <div class="result-actions">
+      <button class="primary" id="retryBtn">同じ範囲でもう一度</button>
+      <button class="secondary" id="homeBtn">範囲選択に戻る</button>
+    </div>
+  </section>
+</main>
 
 <script>
-const WORDS = [
-  {en:"achieve",ja:"達成する"},
-  {en:"increase",ja:"増加する"},
-  {en:"reduce",ja:"減らす"},
-  {en:"provide",ja:"提供する"},
-  {en:"require",ja:"必要とする"},
-  {en:"consider",ja:"よく考える"},
-  {en:"environment",ja:"環境"},
-  {en:"opportunity",ja:"機会"},
-  {en:"experience",ja:"経験"},
-  {en:"knowledge",ja:"知識"},
-  {en:"improve",ja:"改善する"},
-  {en:"develop",ja:"発達する・開発する"},
-  {en:"suggest",ja:"提案する"},
-  {en:"avoid",ja:"避ける"},
-  {en:"allow",ja:"許す"},
-  {en:"purpose",ja:"目的"},
-  {en:"probably",ja:"おそらく"},
-  {en:"although",ja:"〜だけれども"},
-  {en:"necessary",ja:"必要な"},
-  {en:"opinion",ja:"意見"},
-  {en:"decide",ja:"決める"},
-  {en:"discover",ja:"発見する"},
-  {en:"support",ja:"支援する"},
-  {en:"instead",ja:"その代わりに"},
-  {en:"successful",ja:"成功した"},
-  {en:"especially",ja:"特に"},
-  {en:"responsible",ja:"責任がある"},
-  {en:"suggestion",ja:"提案"},
-  {en:"available",ja:"利用できる"},
-  {en:"relationship",ja:"関係"}
+"use strict";
+
+const CSV_FILES = [
+  "words-highschool.csv",
+  "words-highschool-601-1200.csv"
 ];
 
-const SAVE_KEY = "eigoQuestSave";
-const MISTAKE_KEY = "eigoQuestMistakes";
+const XP_KEY = "eigoQuestSave";
+const MISTAKES_KEY = "eigoQuestMistakes";
+
+let WORDS = [];
+let questions = [];
+let currentIndex = 0;
+let correct = 0;
+let sessionXp = 0;
+let answered = false;
+let lastRange = "all";
+
 const $ = id => document.getElementById(id);
 
-let questions = [];
-let current = 0;
-let correctCount = 0;
-let earnedXP = 0;
-let answered = false;
-let started = false;
-let mistakesThisRun = [];
+function readSave() {
+  try { return JSON.parse(localStorage.getItem(XP_KEY)) || {}; }
+  catch { return {}; }
+}
 
-function readJSON(key, fallback) {
-  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
-  catch { return fallback; }
+function getTotalXp() {
+  return Number(readSave().xp || 0);
+}
+
+function getMistakes() {
+  try {
+    const data = JSON.parse(localStorage.getItem(MISTAKES_KEY)) || [];
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveMistakes(items) {
+  localStorage.setItem(MISTAKES_KEY, JSON.stringify(items));
 }
 
 function updateStats() {
-  const save = readJSON(SAVE_KEY, {});
-  const xp = Number(save.xp) || 0;
-  $("xp").textContent = xp;
-  $("level").textContent = Math.floor(xp / 100) + 1;
+  const xp = getTotalXp();
+  $("totalXp").textContent = xp + " XP";
+  $("level").textContent = "Lv." + (Math.floor(xp / 100) + 1);
+  $("mistakeCount").textContent = getMistakes().length + "語";
 }
 
-function shuffle(list) {
-  const arr = [...list];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+/* CSVを、カンマを含む引用符付きセルにも対応して読み込む */
+function parseCSVLine(line) {
+  const fields = [];
+  let field = "";
+  let quoted = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+
+    if (ch === '"') {
+      if (quoted && line[i + 1] === '"') {
+        field += '"';
+        i++;
+      } else {
+        quoted = !quoted;
+      }
+    } else if (ch === "," && !quoted) {
+      fields.push(field.trim());
+      field = "";
+    } else {
+      field += ch;
+    }
   }
-  return arr;
+
+  fields.push(field.trim());
+  return fields;
 }
 
-function saveXP(amount) {
-  if (amount <= 0) return;
-  const save = readJSON(SAVE_KEY, {});
-  save.xp = (Number(save.xp) || 0) + amount;
-  localStorage.setItem(SAVE_KEY, JSON.stringify(save));
-  earnedXP += amount;
+function parseCSV(text) {
+  const lines = text.replace(/^\uFEFF/, "").split(/\r?\n/).filter(line => line.trim());
+  if (lines.length < 2) return [];
+
+  const words = [];
+
+  for (const line of lines.slice(1)) {
+    const cols = parseCSVLine(line);
+    if (cols.length < 3) continue;
+
+    const number = Number(cols[0]);
+    const en = cols[1];
+    const ja = cols.slice(2).join(",").trim();
+
+    if (Number.isFinite(number) && en && ja) {
+      words.push({ number, en, ja });
+    }
+  }
+
+  return words;
+}
+
+async function loadWords() {
+  const status = $("loadStatus");
+
+  try {
+    const datasets = await Promise.all(
+      CSV_FILES.map(async file => {
+        const response = await fetch(file, { cache: "no-store" });
+        if (!response.ok) throw new Error(file + " を読み込めませんでした");
+        return parseCSV(await response.text());
+      })
+    );
+
+    /* 単語番号が重複していた場合は1つにまとめる */
+    const unique = new Map();
+    datasets.flat().forEach(word => unique.set(word.number, word));
+    WORDS = [...unique.values()].sort((a, b) => a.number - b.number);
+
+    if (!WORDS.length) throw new Error("CSVに単語データがありません");
+
+    status.textContent = `単語データ ${WORDS.length}語を読み込みました。`;
+    $("startBtn").disabled = false;
+  } catch (error) {
+    status.textContent =
+      "単語データを読み込めませんでした。CSVファイル2つがこのHTMLと同じフォルダにあるか確認してください。";
+    console.error(error);
+  }
+
   updateStats();
 }
 
-function saveMistake(word) {
-  const list = readJSON(MISTAKE_KEY, []);
-  const safeList = Array.isArray(list) ? list : [];
-  const existing = safeList.find(item => item.en === word.en);
+function pickRandom(items, count) {
+  const copy = [...items];
 
-  if (existing) {
-    existing.count = (Number(existing.count) || 0) + 1;
-    existing.lastSeen = new Date().toISOString();
-    existing.ja = word.ja;
-  } else {
-    safeList.push({
-      en: word.en,
-      ja: word.ja,
-      count: 1,
-      lastSeen: new Date().toISOString()
-    });
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
   }
 
-  localStorage.setItem(MISTAKE_KEY, JSON.stringify(safeList));
+  return copy.slice(0, Math.min(count, copy.length));
 }
 
-function makeQuestions() {
-  questions = shuffle(WORDS).slice(0, 10).map(word => {
-    const wrong = shuffle(WORDS.filter(item => item.en !== word.en)).slice(0, 3);
-    const options = shuffle([word, ...wrong]);
-    return { word, options };
+function makeQuestions(range) {
+  let pool = WORDS;
+
+  if (range === "first") {
+    pool = WORDS.filter(word => word.number >= 1 && word.number <= 600);
+  } else if (range === "second") {
+    pool = WORDS.filter(word => word.number >= 601 && word.number <= 1200);
+  } else if (range === "mistakes") {
+    const numbers = new Set(
+      getMistakes().map(item => Number(typeof item === "object" ? item.number : item))
+    );
+    pool = WORDS.filter(word => numbers.has(word.number));
+  }
+
+  return pickRandom(pool, 10).map(word => {
+    const distractors = pickRandom(
+      WORDS.filter(item => item.number !== word.number && item.ja !== word.ja),
+      3
+    );
+
+    const options = pickRandom([
+      { ...word, isCorrect: true },
+      ...distractors.map(item => ({ ...item, isCorrect: false }))
+    ], 4);
+
+    return { ...word, options };
   });
 }
 
-function startQuiz() {
-  current = 0;
-  correctCount = 0;
-  earnedXP = 0;
+function startQuiz(range = $("range").value) {
+  lastRange = range;
+  questions = makeQuestions(range);
+
+  if (!questions.length) {
+    alert(range === "mistakes"
+      ? "復習リストに単語がありません。通常のクイズに挑戦してみてね！"
+      : "この範囲の単語が見つかりません。CSVファイルを確認してください。");
+    return;
+  }
+
+  currentIndex = 0;
+  correct = 0;
+  sessionXp = 0;
   answered = false;
-  started = true;
-  mistakesThisRun = [];
-  makeQuestions();
-  $("startBtn").style.display = "none";
-  $("nextBtn").disabled = true;
-  $("guideMessage").textContent = "集中して挑戦しよう！1問正解するごとに10 XP獲得できるよ。";
+
+  $("setup").classList.add("hidden");
+  $("result").classList.add("hidden");
+  $("quiz").classList.remove("hidden");
+
   renderQuestion();
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function renderQuestion() {
   answered = false;
-  const item = questions[current];
-  $("questionCount").textContent = `第 ${current + 1} 問 / ${questions.length} 問`;
-  $("scoreLabel").textContent = `正解 ${correctCount}`;
-  $("progressBar").style.width = `${current / questions.length * 100}%`;
-  $("word").textContent = item.word.en;
-  $("feedback").className = "feedback";
-  $("feedback").textContent = "正しい意味を選んでね！";
-  $("nextBtn").disabled = true;
-  $("nextBtn").textContent = current === questions.length - 1 ? "結果を見る →" : "次の問題 →";
-  $("options").replaceChildren();
+  const q = questions[currentIndex];
 
-  item.options.forEach(option => {
+  $("questionCount").textContent = `${currentIndex + 1} / ${questions.length}`;
+  $("correctCount").textContent = correct;
+  $("sessionXp").textContent = sessionXp + " XP";
+  $("progressBar").style.width = `${currentIndex / questions.length * 100}%`;
+  $("wordNumber").textContent = `単語番号 ${q.number}`;
+  $("questionWord").textContent = q.en;
+  $("answers").innerHTML = "";
+  $("feedback").classList.add("hidden");
+  $("nextBtn").classList.add("hidden");
+
+  q.options.forEach((option, index) => {
     const button = document.createElement("button");
-    button.className = "option";
-    button.type = "button";
-    button.textContent = option.ja;
-    button.addEventListener("click", () => chooseAnswer(button, option));
-    $("options").appendChild(button);
+    button.className = "answer";
+
+    const letter = document.createElement("span");
+    letter.className = "letter";
+    letter.textContent = String.fromCharCode(65 + index);
+
+    const meaning = document.createElement("span");
+    meaning.textContent = option.ja;
+
+    button.append(letter, meaning);
+    button.addEventListener("click", () => chooseAnswer(option, button));
+    $("answers").appendChild(button);
   });
 }
 
-function chooseAnswer(button, selected) {
+function chooseAnswer(option, clickedButton) {
   if (answered) return;
   answered = true;
 
-  const item = questions[current];
-  const correct = selected.en === item.word.en;
+  const q = questions[currentIndex];
+  const buttons = [...$("answers").querySelectorAll("button")];
+  buttons.forEach(button => button.disabled = true);
 
-  document.querySelectorAll(".option").forEach(btn => {
-    btn.disabled = true;
-    if (btn.textContent === item.word.ja) btn.classList.add("correct");
-  });
+  const isCorrect = option.number === q.number;
+  const mistakes = new Map(
+    getMistakes().map(item => {
+      const number = Number(typeof item === "object" ? item.number : item);
+      return [number, { number }];
+    })
+  );
 
-  if (correct) {
-    correctCount++;
-    saveXP(10);
-    $("feedback").className = "feedback good";
-    $("feedback").textContent = `正解！🎉「${item.word.en}」は「${item.word.ja}」という意味だよ。+10 XP`;
-    $("guideMessage").textContent = "いい調子！この調子で次の問題も挑戦しよう。";
+  if (isCorrect) {
+    correct++;
+    sessionXp += 10;
+
+    const saved = readSave();
+    saved.xp = Number(saved.xp || 0) + 10;
+    localStorage.setItem(XP_KEY, JSON.stringify(saved));
+
+    mistakes.delete(q.number);
+    $("feedback").textContent = "正解！ +10 XP 🎉";
+    clickedButton.classList.add("correct");
   } else {
-    button.classList.add("wrong");
-    saveMistake(item.word);
-    mistakesThisRun.push(item.word);
-    $("feedback").className = "feedback bad";
-    $("feedback").textContent = `残念！正解は「${item.word.ja}」。この単語は復習リストに保存したよ。`;
-    $("guideMessage").textContent = "間違えた単語は復習ページで何度でも練習できるよ。";
+    mistakes.set(q.number, { number: q.number });
+    $("feedback").textContent = `不正解… 正解は「${q.ja}」です。`;
+    clickedButton.classList.add("wrong");
+
+    const correctButton = buttons.find(
+      button => button.lastElementChild.textContent === q.ja
+    );
+    if (correctButton) correctButton.classList.add("correct");
   }
 
-  $("scoreLabel").textContent = `正解 ${correctCount}`;
-  $("nextBtn").disabled = false;
-}
+  saveMistakes([...mistakes.values()]);
+  $("feedback").classList.remove("hidden");
+  $("correctCount").textContent = correct;
+  $("sessionXp").textContent = sessionXp + " XP";
+  $("progressBar").style.width = `${(currentIndex + 1) / questions.length * 100}%`;
+  $("nextBtn").textContent =
+    currentIndex === questions.length - 1 ? "結果を見る →" : "次の問題へ →";
+  $("nextBtn").classList.remove("hidden");
 
-function showResult() {
-  $("progressBar").style.width = "100%";
-  $("questionCount").textContent = "クエスト完了！";
-  $("scoreLabel").textContent = `正解 ${correctCount} / 10`;
-
-  const area = $("questionArea");
-  area.replaceChildren();
-
-  const result = document.createElement("div");
-  result.className = "result";
-
-  const emoji = document.createElement("div");
-  emoji.className = "result-emoji";
-  emoji.textContent = correctCount === 10 ? "🏆" : correctCount >= 7 ? "🎉" : "💪";
-
-  const title = document.createElement("h2");
-  title.textContent = correctCount === 10 ? "パーフェクト！" :
-    correctCount >= 7 ? "よくできました！" : "チャレンジ完了！";
-
-  const score = document.createElement("div");
-  score.className = "score";
-  score.textContent = `${correctCount} / 10`;
-
-  const message = document.createElement("p");
-  message.textContent = `獲得経験値：+${earnedXP} XP`;
-
-  const detail = document.createElement("p");
-  detail.textContent = mistakesThisRun.length
-    ? `間違えた単語：${mistakesThisRun.length}語。復習ページで確認しよう！`
-    : "間違いなし！すばらしい！";
-
-  result.append(emoji, title, score, message, detail);
-
-  if (mistakesThisRun.length) {
-    const list = document.createElement("ul");
-    list.className = "mistake-list";
-    mistakesThisRun.forEach(word => {
-      const li = document.createElement("li");
-      li.textContent = `${word.en}：${word.ja}`;
-      list.appendChild(li);
-    });
-    result.appendChild(list);
-  }
-
-  const actions = document.createElement("div");
-  actions.className = "actions";
-
-  const retry = document.createElement("button");
-  retry.className = "btn btn-light";
-  retry.textContent = "もう一度挑戦";
-  retry.addEventListener("click", () => {
-    area.innerHTML = `
-      <div class="question-label">次の英単語の意味は？</div>
-      <div class="question" id="word">Ready?</div>
-      <div class="hint">最も適切な日本語を選択してください。</div>
-      <div class="options" id="options"></div>
-      <div class="feedback" id="feedback" aria-live="polite">準備ができたらスタート！</div>
-      <div class="actions">
-        <button class="btn btn-light" id="startBtn">クイズを開始</button>
-        <button class="btn btn-primary" id="nextBtn" disabled>次の問題 →</button>
-      </div>`;
-    $("startBtn").addEventListener("click", startQuiz);
-    $("nextBtn").addEventListener("click", nextQuestion);
-    $("startBtn").click();
-  });
-
-  const menu = document.createElement("a");
-  menu.className = "link";
-  menu.href = "highschool.html";
-  menu.textContent = "高校生版メニュー";
-
-  actions.append(retry, menu);
-  result.appendChild(actions);
-  area.appendChild(result);
-  $("startBtn").style.display = "none";
-  $("nextBtn").style.display = "none";
-  $("guideMessage").textContent = "クエスト完了！復習ページも使って、苦手な単語を覚えていこう。";
+  updateStats();
 }
 
 function nextQuestion() {
-  if (!answered) return;
-  current++;
-  if (current >= questions.length) {
-    showResult();
-  } else {
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
     renderQuestion();
+  } else {
+    showResult();
   }
 }
 
-$("startBtn").addEventListener("click", startQuiz);
-$("nextBtn").addEventListener("click", nextQuestion);
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, ch => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[ch]));
+}
 
-updateStats();
+function showResult() {
+  $("quiz").classList.add("hidden");
+  $("result").classList.remove("hidden");
+
+  $("resultScore").textContent = `${correct} / ${questions.length}`;
+
+  const percentage = Math.round(correct / questions.length * 100);
+  $("resultMessage").textContent =
+    percentage === 100 ? "満点！すばらしい！🏆" :
+    percentage >= 80 ? "すごい！かなり身についているね！✨" :
+    percentage >= 50 ? "いい調子！間違えた単語を復習しよう！💪" :
+    "復習して、もう一度チャレンジしよう！📚";
+
+  $("resultXp").textContent = sessionXp + " XP";
+  $("resultTotalXp").textContent = getTotalXp() + " XP";
+  $("resultLevel").textContent = "Lv." + (Math.floor(getTotalXp() / 100) + 1);
+
+  const missedNumbers = new Set(
+    getMistakes().map(item => Number(typeof item === "object" ? item.number : item))
+  );
+  const missed = questions.filter(q => missedNumbers.has(q.number));
+
+  if (missed.length) {
+    $("resultMistakes").innerHTML =
+      `<h3>今回の復習単語 (${missed.length}語)</h3>` +
+      missed.map(q =>
+        `<p><strong>${q.number}. ${escapeHtml(q.en)}</strong> — ${escapeHtml(q.ja)}</p>`
+      ).join("");
+  } else {
+    $("resultMistakes").innerHTML = "<p>全問正解！復習リストは空です 🎉</p>";
+  }
+
+  updateStats();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+$("startBtn").addEventListener("click", () => startQuiz());
+$("nextBtn").addEventListener("click", nextQuestion);
+$("retryBtn").addEventListener("click", () => startQuiz(lastRange));
+
+$("homeBtn").addEventListener("click", () => {
+  $("result").classList.add("hidden");
+  $("quiz").classList.add("hidden");
+  $("setup").classList.remove("hidden");
+  updateStats();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+$("range").addEventListener("change", () => {
+  $("startBtn").textContent =
+    $("range").value === "mistakes" ? "復習クイズを始める" : "クイズを始める";
+});
+
+loadWords();
 </script>
 </body>
 </html>
